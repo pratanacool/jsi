@@ -1,6 +1,5 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
-  class M_Pemilih extends CI_Model
-  {
+  class M_Pemilih extends CI_Model{
     public $id;
     public $nik;
     public $nama;
@@ -13,17 +12,15 @@
     public $kelurahan;
     public $tps;
 
-    function __construct()
-    {
+    function __construct(){
       parent::__construct();
     }
     
-    public function getAllData($offset = null, $limit = null)
-    {
+    public function getAllData($offset = null, $limit = null){
       
       if( $this->provinsi != null ){
         $this->db->where(array("provinsi" => $this->provinsi));
-      }
+      } 
 
       if( $this->kota != null ){
         $this->db->where(array("kota" => $this->kota));
@@ -51,6 +48,33 @@
       return $result;
 
     }
+
+    public function getTps($type, $key){
+      switch ($type) {
+        case "provinsi":
+          $this->db->where(array("provinsi" => $key));
+          break;
+        
+        case "kota":
+          $this->db->where(array("kota" => $key));
+          break;
+
+        case "kecamatan":
+          $this->db->where(array("kecamatan" => $key));
+          break;
+
+        case "kelurahan":
+          $this->db->where(array("kelurahan" => $key));
+          break;
+
+      }
+      $this->db->select('distinct(tps)');
+      $this->db->from("pemilih");
+      $this->db->order_by("tps","asc");
+      $result = $this->db->get();
+      return $result;      
+    }
+
   }
 
 ?>

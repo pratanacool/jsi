@@ -7,7 +7,7 @@
     <meta name="msapplication-tap-highlight" content="no">
     <meta name="description" content="Materialize is a Material Design Admin Template,It's modern, responsive and based on Material Design by Google. ">
     <meta name="keywords" content="materialize, admin template, dashboard template, flat admin template, responsive admin template,">
-    <title>Page Blank | Materialize - Material Design Admin Template</title>
+    <title>IDPT</title>
 
     <!-- Favicons-->
     <link rel="icon" href="<?php echo base_url('assets');?>/images/favicon/favicon-32x32.png" sizes="32x32">
@@ -55,11 +55,26 @@
               <div class="container">
                 <div class="row">
                   <div class="col s12 m12 l12">
-                    <h5 class="breadcrumbs-title">Blank Page</h5>
+                    <h5 class="breadcrumbs-title"><?php echo $judul;?></h5>
+                    <?php $bc = explode(";", $breadcrumbs);?>
                     <ol class="breadcrumbs">
-                        <li><a href="index.html">Dashboard</a></li>
-                        <li><a href="#">Pages</a></li>
-                        <li class="active">Blank Page</li>
+                        <?php
+                          $class = "";
+                          $linkf = "<a href='#'>";
+                          $linkl = "</a>";
+                          for($i = 0; $i < count($bc); $i++){
+
+                            if($i === (count($bc)-1)){
+                              $class = "active";
+                              $linkf="";
+                              $linkl="";
+                            }
+
+                            echo "<li class='".$class."'>".$linkf.$bc[$i].$linkl."</a></li>";
+                          }
+
+                        ?>
+                         
                     </ol>
                   </div>
                 </div>
@@ -70,10 +85,8 @@
         <div class="container">
         
           <div class="section">
-            <p class="caption">A Simple Blank Page to use it for your custome design and elements.</p>
             <div class="divider"></div>
             <?php echo $isi; ?>
-            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
           </div>
 
         </div>
