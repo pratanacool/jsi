@@ -109,7 +109,7 @@ class CI_Pagination {
 	 *
 	 * @var	bool
 	 */
-	protected $use_page_numbers = TRUE;
+	protected $use_page_numbers = FALSE;
 
 	/**
 	 * First link

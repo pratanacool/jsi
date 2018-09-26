@@ -29,6 +29,12 @@
     <link href="<?php echo base_url('assets');?>/js/plugins/prism/prism.css" type="text/css" rel="stylesheet" media="screen,projection">
     <link href="<?php echo base_url('assets');?>/js/plugins/perfect-scrollbar/perfect-scrollbar.css" type="text/css" rel="stylesheet" media="screen,projection">
     <link href="<?php echo base_url('assets');?>/js/plugins/chartist-js/chartist.min.css" type="text/css" rel="stylesheet" media="screen,projection">
+
+    <link href="<?php echo base_url('assets');?>/js/plugins/data-tables/css/jquery.dataTables.min.css" type="text/css" rel="stylesheet" media="screen,projection">
+
+
+    <!-- jQuery Library -->
+    <script type="text/javascript" src="<?php echo base_url('assets');?>/js/plugins/jquery-1.11.2.min.js"></script>    
   </head>
 
   <body>
@@ -119,10 +125,11 @@
     <!-- Footer -->
     <?php echo $footer; ?>
     <!-- /Footer -->
-    
-    
-    <!-- jQuery Library -->
-    <script type="text/javascript" src="<?php echo base_url('assets');?>/js/plugins/jquery-1.11.2.min.js"></script>    
+
+    <!--floatThead -->
+    <script type="text/javascript" src="<?php echo base_url('assets');?>/js/plugins/floatThead/jquery.floatThead.min.js"></script>
+    <script type="text/javascript" src="<?php echo base_url('assets');?>/js/plugins/floatThead/jquery.floatThead-slim.min.js"></script>
+
     <!--materialize js-->
     <script type="text/javascript" src="<?php echo base_url('assets');?>/js/materialize.js"></script>
     <!--prism
@@ -136,5 +143,11 @@
     <script type="text/javascript" src="<?php echo base_url('assets');?>/js/plugins.js"></script>
     <!--custom-script.js - Add your own theme custom JS-->
     <script type="text/javascript" src="<?php echo base_url('assets');?>/js/custom-script.js"></script>
+
+
+    <!-- data-tables -->
+    <script type="text/javascript" src="<?php echo base_url('assets');?>/js/plugins/data-tables/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="<?php echo base_url('assets');?>/js/plugins/data-tables/data-tables-script.js"></script>
+    
   </body>
 </html>

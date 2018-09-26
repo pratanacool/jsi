@@ -1,11 +1,10 @@
-/*================================================================================
-	Item Name: Materialize - Material Design Admin Template
-	Version: 3.0
-	Author: GeeksLabs
-	Author URL: http://www.themeforest.net/user/geekslabs
-================================================================================
+$('table.demo1').floatThead({
+	position: 'fixed',
+	scrollingTop:65
+});
 
-NOTE:
-------
-PLACE HERE YOUR OWN JS CODES AND IF NEEDED.
-WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR CUSTOM SCRIPT IT'S BETTER LIKE THIS. */
+window.setTimeout(function() {
+    $("#card-alert").fadeTo(500, 0).slideUp(500, function(){
+        $(this).remove(); 
+    });
+}, 4000);

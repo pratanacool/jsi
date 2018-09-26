@@ -1,5 +1,5 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
-  class Dashboard extends MY_Controller{
+  class Provinsi extends MY_Controller{
     function __construct(){
       parent ::__construct();
       $this->load->library('pagination');
@@ -13,11 +13,11 @@
       $this->load->model('M_Pemilih','pemilih',true);
       $dataProvinsi = array();
       
-      $limit = 20;      
+      $limit = 10;      
       $offset = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
 
       $config['per_page'] = $limit;      
-      $config['base_url'] = base_url('Dashboard/index');
+      $config['base_url'] = base_url('provinsi/index');
       $config['total_rows'] = $this->provinsi->getProvinsi()->num_rows();
 
       $rsProvinsi = $this->provinsi->getProvinsi($offset, $limit)->result();
@@ -30,6 +30,7 @@
         $rsKecamatan = $this->kecamatan->getKecamatan("provinsi",$id);
         $rsKelurahan = $this->kelurahan->getKelurahan("provinsi",$id);
         $rsTps = $this->pemilih->getTps("provinsi",$id);
+        $rsPemilih = $this->pemilih->getPemilih("provinsi",$id);
 
         $dataProvinsi[$i]['id'] = $id; 
         $dataProvinsi[$i]['nama'] = $name; 
@@ -37,6 +38,7 @@
         $dataProvinsi[$i]['jKecamatan'] = $rsKecamatan->num_rows();
         $dataProvinsi[$i]['jKelurahan'] = $rsKelurahan->num_rows();
         $dataProvinsi[$i]['jTps'] = $rsTps->num_rows();
+        $dataProvinsi[$i]['jPemilih'] = $rsPemilih->num_rows();
 
       }
       
@@ -45,7 +47,7 @@
       $data['breadcrumbs'] = "Provinsi";
       $data['provinsi'] = $dataProvinsi;
       $data["paginator"] = $this->pagination->create_links();
-      $this->render_page('dashboard',$data);
+      $this->render_page('provinsi',$data);
 
     }
 

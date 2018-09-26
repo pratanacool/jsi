@@ -9,6 +9,29 @@
       parent::__construct();
     }
 
+    public function getAllData($offset = null, $limit = null){
+        if($this->id != ""){
+            $this->db->where(array("id"=>$this->id));
+        }
+
+        if($this->kota_id != ""){
+            $this->db->where(array("kota_id"=>$this->kota_id));
+        }
+
+        if($this->name != ""){
+            $this->db->where(array("name"=>$this->name));
+        }
+
+        $this->db->select('*');
+        $this->db->order_by('name','asc');
+        
+        $this->db->limit($limit, $offset);
+
+        $result = $this->db->get('kecamatan');
+
+        return $result;
+    } 
+
     public function getKecamatan($tipe, $key){
         switch ($tipe) {
             case "provinsi":
