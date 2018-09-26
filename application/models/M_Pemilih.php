@@ -153,7 +153,7 @@
       }
       else {
         $this->db->insert('pemilih',$data);
-        $this->id = $this->db->last_id();
+        // $this->id = $this->db->insert_id();
       }
 
       return true;

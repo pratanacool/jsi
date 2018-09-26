@@ -1,5 +1,6 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
   class Pemilih extends MY_Controller{
+    
     function __construct(){
       parent ::__construct();
       $this->load->library('pagination');
@@ -11,7 +12,7 @@
 
       $this->pemilih->kelurahan = $idKelurahan;
 
-      $rsPemilih = $this->pemilih->getAllData(0,100)->result();
+      $rsPemilih = $this->pemilih->getAllData()->result();
       $data['judul'] = "Data Kecamatan";
       $data['breadcrumbs'] = "Provinsi;Kota;Kecamatan;Kelurahan;pemilih";
       $data['pemilih'] = $rsPemilih;
@@ -37,7 +38,39 @@
 
       header("Location: " . $_SERVER["HTTP_REFERER"]);  
     }
- 
+    
+    public function uploadAPI(){
+      $data = json_decode(file_get_contents('php://input'), true);
+
+      // var_dump($data['wilayah']);
+      // var_dump($data['aaData']);
+      $provinsi = $data['wilayah']['provinsi'];
+      $kota = $data['wilayah']['kabkota'];
+      $kecamatan = $data['wilayah']['kecamatan'];
+      $kelurahan = $data['wilayah']['kelurahan'];
+
+      $dPemilih = $data['aaData'];
+
+      for ($i = 0; $i < count($dPemilih); $i++) {
+        $this->pemilih->nik = $dPemilih[$i]['nik'];
+        $this->pemilih->nama = $dPemilih[$i]["nama"];
+        $this->pemilih->tempatLahir = $dPemilih[$i]["tempatLahir"];
+        $this->pemilih->tanggalLahir = "1900-01-01";
+        $this->pemilih->gender = $dPemilih[$i]["jenisKelamin"];
+        $this->pemilih->tps = $dPemilih[$i]["tps"];
+        $this->pemilih->provinsi = $provinsi;
+        $this->pemilih->kota = $kota;
+        $this->pemilih->kecamatan = $kecamatan;
+        $this->pemilih->kelurahan = $kelurahan;
+        $hasil = $this->pemilih->save();
+        if($hasil == true){
+          echo "masuk <br>";
+        }
+      }
+
+
+      echo "selesai";
+    }
 
 
 

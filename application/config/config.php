@@ -35,7 +35,8 @@ $config['base_url'] = 'http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_N
 | variable so that it is blank.
 |
 */
-$config['index_page'] = 'index.php';
+// $config['index_page'] = 'index.php';
+$config['index_page'] = '';
 
 /*
 |--------------------------------------------------------------------------
@@ -136,7 +137,7 @@ $config['subclass_prefix'] = 'MY_';
 | Note: This will NOT disable or override the CodeIgniter-specific
 |	autoloading (application/config/autoload.php)
 */
-$config['composer_autoload'] = FALSE;
+$config['composer_autoload'] = realpath(APPPATH . '../vendor/autoload.php');
 
 /*
 |--------------------------------------------------------------------------
