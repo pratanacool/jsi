@@ -47,10 +47,39 @@
       $this->db->limit($limit, $offset);
       $result = $this->db->get();
       return $result;
-
     }
 
-    public function getTps($type, $key){
+    public function getTotalData($offset = null, $limit = null){
+      
+      if( $this->provinsi != null ){
+        $this->db->where(array("provinsi" => $this->provinsi));
+      } 
+
+      if( $this->kota != null ){
+        $this->db->where(array("kota" => $this->kota));
+      }
+
+      if( $this->kecamatan != null ){
+        $this->db->where(array("kecamatan" => $this->kecamatan));
+      }
+
+      if( $this->kelurahan != null ){
+        $this->db->where(array("kelurahan" => $this->kelurahan));
+      }
+
+      if( $this->tps != null ){
+        $this->db->where(array("tps" => $this->tps));
+      }
+
+      $this->db->select(
+        "count(*)"
+      );
+      $this->db->from("pemilih");
+      $result = $this->db->get();
+      return $result;
+    }
+
+    public function getAllDataTps($type, $key, $offset, $limit){
       switch ($type) {
         case "provinsi":
           $this->db->where(array("provinsi" => $key));
@@ -69,11 +98,36 @@
           break;
 
       }
-      $this->db->select('distinct(tps)');
+      $this->db->select('distinct(tps) as id');
       $this->db->from("pemilih");
-      $this->db->order_by("tps","asc");
+      $this->db->limit($limit, $offset);
       $result = $this->db->get();
       return $result;      
+    }
+
+    public function getTotalDataTps($type, $key){
+      switch ($type) {
+        case "provinsi":
+          $this->db->where(array("provinsi" => $key));
+          break;
+        
+        case "kota":
+          $this->db->where(array("kota" => $key));
+          break;
+
+        case "kecamatan":
+          $this->db->where(array("kecamatan" => $key));
+          break;
+
+        case "kelurahan":
+          $this->db->where(array("kelurahan" => $key));
+          break;
+
+      }
+      $this->db->select('count(distinct(tps)) as total');
+      $this->db->from("pemilih");
+      $result = $this->db->get();
+      return $result->row()->total;      
     }
 
     public function getPemilih($type, $key){
@@ -92,6 +146,10 @@
 
         case "kelurahan":
           $this->db->where(array("kelurahan" => $key));
+          break;        
+
+        case "tps":
+          $this->db->where(array("tps" => $key));
           break;
 
       }

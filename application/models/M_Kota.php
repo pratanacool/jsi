@@ -31,6 +31,25 @@
         $result = $this->db->get('kota');
 
         return $result;
+    }     
+
+    public function getTotalData(){
+        if($this->id != ""){
+            $this->db->where(array("id"=>$this->id));
+        }
+
+        if($this->provinsi_id != ""){
+            $this->db->where(array("provinsi_id"=>$this->provinsi_id));
+        }
+
+        if($this->name != ""){
+            $this->db->where(array("name"=>$this->name));
+        }
+
+        $this->db->select('count(*) as total');
+        $result = $this->db->get('kota');
+
+        return $result->row()->total;
     } 
 
     public function getKota($tipe, $key){

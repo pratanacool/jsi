@@ -18,7 +18,7 @@
 
       $config['per_page'] = $limit;      
       $config['base_url'] = base_url('provinsi/index');
-      $config['total_rows'] = $this->provinsi->getProvinsi()->num_rows();
+      $config['total_rows'] = $this->provinsi->getTotalData();
 
       $rsProvinsi = $this->provinsi->getProvinsi($offset, $limit)->result();
 
@@ -26,18 +26,20 @@
         $id = $rsProvinsi[$i]->id;
         $name = $rsProvinsi[$i]->name;
 
-        $rsKota = $this->kota->getKota("provinsi",$id);
+        // $rsKota = $this->kota->getKota("provinsi",$id);
+        $this->kota->provinsi_id = $id;
+        $rsKota = $this->kota->getTotalData();
         $rsKecamatan = $this->kecamatan->getKecamatan("provinsi",$id);
         $rsKelurahan = $this->kelurahan->getKelurahan("provinsi",$id);
-        $rsTps = $this->pemilih->getTps("provinsi",$id);
+        $rsTps = $this->pemilih->getTotalDataTps("provinsi",$id);
         $rsPemilih = $this->pemilih->getPemilih("provinsi",$id);
 
         $dataProvinsi[$i]['id'] = $id; 
         $dataProvinsi[$i]['nama'] = $name; 
-        $dataProvinsi[$i]['jKota'] = $rsKota->num_rows();
+        $dataProvinsi[$i]['jKota'] = $rsKota;
         $dataProvinsi[$i]['jKecamatan'] = $rsKecamatan->num_rows();
         $dataProvinsi[$i]['jKelurahan'] = $rsKelurahan->num_rows();
-        $dataProvinsi[$i]['jTps'] = $rsTps->num_rows();
+        $dataProvinsi[$i]['jTps'] = $rsTps;
         $dataProvinsi[$i]['jPemilih'] = $rsPemilih->num_rows();
 
       }

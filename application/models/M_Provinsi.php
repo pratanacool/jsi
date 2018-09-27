@@ -9,12 +9,18 @@
     }
 
     public function getProvinsi($offset = null, $limit = null){
-    	$this->db->select('*');
+      $this->db->select('*');
         $this->db->order_by('name','asc');
-    	$this->db->limit($limit, $offset);
+        $this->db->limit($limit, $offset);
         $result = $this->db->get('provinsi');
 
-    	return $result;
+      return $result;
+    }     
+
+    public function getTotalData($offset = null, $limit = null){
+    	$this->db->select('count(*) as total');
+      $result = $this->db->get('provinsi');
+    	return $result->row()->total;
     } 
 
   }

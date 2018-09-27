@@ -29,7 +29,7 @@
 
       $config['base_url'] = base_url('Kota/index/'.$idProvinsi.'/0');
       $config['per_page'] = $limit;      
-      $config['total_rows'] = $this->kota->getAllData()->num_rows();
+      $config['total_rows'] = $this->kota->getTotalData();
 
       $rsKota = $this->kota->getAllData($offset, $limit)->result();
 
@@ -39,14 +39,14 @@
 
         $rsKecamatan = $this->kecamatan->getKecamatan("kota",$id);
         $rsKelurahan = $this->kelurahan->getKelurahan("kota",$id);
-        $rsTps = $this->pemilih->getTps("kota",$id);
+        $rsTps = $this->pemilih->getTotalDataTps("kota",$id);
         $rsPemilih = $this->pemilih->getPemilih("kota",$id);
 
         $dataKota[$i]['id'] = $id; 
         $dataKota[$i]['nama'] = $name; 
         $dataKota[$i]['jKecamatan'] = $rsKecamatan->num_rows();
         $dataKota[$i]['jKelurahan'] = $rsKelurahan->num_rows();
-        $dataKota[$i]['jTps'] = $rsTps->num_rows();
+        $dataKota[$i]['jTps'] = $rsTps;
         $dataKota[$i]['jPemilih'] = $rsPemilih->num_rows();
 
       }

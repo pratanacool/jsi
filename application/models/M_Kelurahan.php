@@ -9,6 +9,25 @@
       parent::__construct();
     }
 
+    public function getTotalData(){
+        if($this->id != ""){
+            $this->db->where(array("id"=>$this->id));
+        }
+
+        if($this->kecamatan_id != ""){
+            $this->db->where(array("kecamatan_id"=>$this->kecamatan_id));
+        }
+
+        if($this->name != ""){
+            $this->db->where(array("name"=>$this->name));
+        }
+
+        $this->db->select('count(*) as total');
+        $result = $this->db->get('kelurahan');
+
+        return $result->row()->total;
+    } 
+
     public function getAllData($offset = null, $limit = null){
         if($this->id != ""){
             $this->db->where(array("id"=>$this->id));

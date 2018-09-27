@@ -10,13 +10,50 @@
     public function index(){
       $idKelurahan = $this->uri->segment(3);
 
-      $this->pemilih->kelurahan = $idKelurahan;
+      $this->pemilih->tps = $idKelurahan;
 
       $rsPemilih = $this->pemilih->getAllData()->result();
+      // $rsPemilih = $this->pemilih->getTotalData()->result();
       $data['judul'] = "Data Kecamatan";
       $data['breadcrumbs'] = "Provinsi;Kota;Kecamatan;Kelurahan;pemilih";
       $data['pemilih'] = $rsPemilih;
       $this->render_page('pemilih',$data);
+    }    
+
+    public function tps(){
+      $idKelurahan = $this->uri->segment(3);
+
+      $this->pemilih->kelurahan = $idKelurahan;
+      $dataPemilih = array();
+      $limit = 10;
+      $page = $this->uri->segment(5);
+
+      if($page == 0):
+        $offset = 0;
+      else:
+        $offset = $page;
+      endif; 
+
+      $config['base_url'] = base_url('Pemilih/tps/'.$idKelurahan.'/0');
+      $config['per_page'] = $limit;      
+      $config['total_rows'] = $this->pemilih->getTotalDataTps("kelurahan", $idKelurahan);
+
+      $rsTps = $this->pemilih->getAllDataTps("kelurahan", $idKelurahan, $offset, $limit)->result();
+
+      for ($i = 0; $i < count($rsTps); $i++) {
+        $id = $rsTps[$i]->id;
+
+        $rsPemilih = $this->pemilih->getPemilih("tps",$id);
+        $dataPemilih[$i]['nama'] = $id;
+        $dataPemilih[$i]['jPemilih'] = $rsPemilih->num_rows();
+      }
+      
+      $this->pagination->initialize($config);
+      $data['judul'] = "Data TPS";
+      $data['breadcrumbs'] = "Provinsi;Kota;Kecamatan;Kelurahan;TPS";
+      $data['tps'] = $dataPemilih;
+      $data["paginator"] = $this->pagination->create_links();
+      $this->render_page('tps',$data);
     }    
 
     public function simpan(){

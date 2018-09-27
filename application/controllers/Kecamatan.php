@@ -28,7 +28,7 @@
 
       $config['base_url'] = base_url('Kecamatan/index/'.$idKota.'/0');
       $config['per_page'] = $limit;      
-      $config['total_rows'] = $this->kecamatan->getAllData()->num_rows();
+      $config['total_rows'] = $this->kecamatan->getTotalData();
 
       $rsKecamatan = $this->kecamatan->getAllData($offset, $limit)->result();
 
@@ -37,13 +37,13 @@
         $name = $rsKecamatan[$i]->name;
 
         $rsKelurahan = $this->kelurahan->getKelurahan("kecamatan",$id);
-        $rsTps = $this->pemilih->getTps("kecamatan",$id);
+        $rsTps = $this->pemilih->getTotalDataTps("kecamatan",$id);
         $rsPemilih = $this->pemilih->getPemilih("kecamatan",$id);
 
         $dataKecamatan[$i]['id'] = $id; 
         $dataKecamatan[$i]['nama'] = $name; 
         $dataKecamatan[$i]['jKelurahan'] = $rsKelurahan->num_rows();
-        $dataKecamatan[$i]['jTps'] = $rsTps->num_rows();
+        $dataKecamatan[$i]['jTps'] = $rsTps;
         $dataKecamatan[$i]['jPemilih'] = $rsPemilih->num_rows();
 
       }

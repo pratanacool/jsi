@@ -27,7 +27,7 @@
 
       $config['base_url'] = base_url('Kelurahan/index/'.$idKecamatan.'/0');
       $config['per_page'] = $limit;      
-      $config['total_rows'] = $this->kelurahan->getAllData()->num_rows();
+      $config['total_rows'] = $this->kelurahan->getTotalData();
 
       $rsKelurahan = $this->kelurahan->getAllData($offset, $limit)->result();
 
@@ -35,12 +35,12 @@
         $id = $rsKelurahan[$i]->id;
         $name = $rsKelurahan[$i]->name;
 
-        $rsTps = $this->pemilih->getTps("kelurahan",$id);
+        $rsTps = $this->pemilih->getTotalDataTps("kelurahan",$id);
         $rsPemilih = $this->pemilih->getPemilih("kelurahan",$id);
 
         $dataKelurahan[$i]['id'] = $id; 
         $dataKelurahan[$i]['nama'] = $name; 
-        $dataKelurahan[$i]['jTps'] = $rsTps->num_rows();
+        $dataKelurahan[$i]['jTps'] = $rsTps;
         $dataKelurahan[$i]['jPemilih'] = $rsPemilih->num_rows();
 
       }
