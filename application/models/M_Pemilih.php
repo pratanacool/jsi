@@ -98,7 +98,7 @@
           break;
 
       }
-      $this->db->select('distinct(tps) as id');
+      $this->db->select('distinct(tps) as id, kelurahan');
       $this->db->from("pemilih");
       $this->db->limit($limit, $offset);
       $result = $this->db->get();
@@ -130,7 +130,7 @@
       return $result->row()->total;      
     }
 
-    public function getPemilih($type, $key){
+    public function getPemilih($type, $key, $key2 = null){
       switch ($type) {
         case "provinsi":
           $this->db->where(array("provinsi" => $key));
@@ -149,15 +149,14 @@
           break;        
 
         case "tps":
-          $this->db->where(array("tps" => $key));
+          $this->db->where(array("tps" => $key, "kelurahan" => $key2));
           break;
 
       }
-      $this->db->select('*');
+      $this->db->select('count(*) as total');
       $this->db->from("pemilih");
-      $this->db->order_by("nama","asc");
       $result = $this->db->get();
-      return $result; 
+      return $result->row()->total; 
     }
 
     public function save(){

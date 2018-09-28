@@ -16,7 +16,7 @@
       $this->kota->provinsi_id = $idProvinsi;
       $dataKota = array();
       
-      $limit = 10;      
+      $limit = 5;      
 
 
       $page = $this->uri->segment(5);
@@ -44,10 +44,10 @@
 
         $dataKota[$i]['id'] = $id; 
         $dataKota[$i]['nama'] = $name; 
-        $dataKota[$i]['jKecamatan'] = $rsKecamatan->num_rows();
-        $dataKota[$i]['jKelurahan'] = $rsKelurahan->num_rows();
+        $dataKota[$i]['jKecamatan'] = $rsKecamatan;
+        $dataKota[$i]['jKelurahan'] = $rsKelurahan;
         $dataKota[$i]['jTps'] = $rsTps;
-        $dataKota[$i]['jPemilih'] = $rsPemilih->num_rows();
+        $dataKota[$i]['jPemilih'] = $rsPemilih;
 
       }
       $this->pagination->initialize($config);

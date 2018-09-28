@@ -8,12 +8,24 @@
     }
 
     public function index(){
-      $idKelurahan = $this->uri->segment(3);
+      $tps = $this->uri->segment(3);
+      $kelurahan = $this->uri->segment(4);
 
-      $this->pemilih->tps = $idKelurahan;
+      $this->pemilih->tps = $tps;
+      $this->pemilih->kelurahan = $kelurahan;
 
       $rsPemilih = $this->pemilih->getAllData()->result();
       // $rsPemilih = $this->pemilih->getTotalData()->result();
+      $pilihan = array("",
+                  "Partai saya dan caleg saya",
+                  "Partai saya tapi caleg lain (dari partai saya)",
+                  "Partai saya tetapi tidak tau calegnya siapa",
+                  "Partai lain dan caleg lain",
+                  "Tidak tau partai mana tetapi calegnya saya",
+                  "Tidak tau partai mana dan caleg siapa"
+                 );
+
+      $data['listPilihan'] = $pilihan;
       $data['judul'] = "Data Kecamatan";
       $data['breadcrumbs'] = "Provinsi;Kota;Kecamatan;Kelurahan;pemilih";
       $data['pemilih'] = $rsPemilih;
@@ -25,7 +37,7 @@
 
       $this->pemilih->kelurahan = $idKelurahan;
       $dataPemilih = array();
-      $limit = 10;
+      $limit = 5;
       $page = $this->uri->segment(5);
 
       if($page == 0):
@@ -42,10 +54,12 @@
 
       for ($i = 0; $i < count($rsTps); $i++) {
         $id = $rsTps[$i]->id;
+        $kelurahan= $rsTps[$i]->kelurahan;
 
-        $rsPemilih = $this->pemilih->getPemilih("tps",$id);
+        $rsPemilih = $this->pemilih->getPemilih("tps",$id, $kelurahan);
         $dataPemilih[$i]['nama'] = $id;
-        $dataPemilih[$i]['jPemilih'] = $rsPemilih->num_rows();
+        $dataPemilih[$i]['kelurahan'] = $kelurahan;
+        $dataPemilih[$i]['jPemilih'] = $rsPemilih;
       }
       
       $this->pagination->initialize($config);

@@ -60,9 +60,9 @@
                 $this->db->where(array("left(id,4)"=>$key));
                 break;
         }
-    	$this->db->select('*');
+    	$this->db->select('count(*) as total');
     	$result = $this->db->get('kecamatan');
-    	return $result;
+    	return $result->row()->total;
     }
 
 

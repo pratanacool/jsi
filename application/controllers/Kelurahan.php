@@ -41,7 +41,7 @@
         $dataKelurahan[$i]['id'] = $id; 
         $dataKelurahan[$i]['nama'] = $name; 
         $dataKelurahan[$i]['jTps'] = $rsTps;
-        $dataKelurahan[$i]['jPemilih'] = $rsPemilih->num_rows();
+        $dataKelurahan[$i]['jPemilih'] = $rsPemilih;
 
       }
       $this->pagination->initialize($config);

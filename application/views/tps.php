@@ -9,7 +9,7 @@
 		<?php
 			foreach ($tps as $row) {
 				echo "<tr>";
-					echo "<td> <center> <a href='".base_url('pemilih/index/').$row['nama']."/0' > ".$row['nama']." </a> </center></td>";
+					echo "<td> <center> <a href='".base_url('pemilih/index/').$row['nama']."/".$row['kelurahan']."' > ".$row['nama']." </a> </center></td>";
 					echo "<td>".$row['jPemilih']."</td>";
 				echo "</tr>";
 			}

@@ -63,9 +63,9 @@
                 $this->db->where(array("left(id,7)"=>$key));
                 break;
         }
-    	$this->db->select('*');
+    	$this->db->select('count(*) as total');
     	$result = $this->db->get('kelurahan');
-    	return $result;
+    	return $result->row()->total;
     }
 
   }

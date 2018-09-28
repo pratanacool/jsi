@@ -13,7 +13,7 @@
       $this->load->model('M_Pemilih','pemilih',true);
       $dataProvinsi = array();
       
-      $limit = 10;      
+      $limit = 5;      
       $offset = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
 
       $config['per_page'] = $limit;      
@@ -37,10 +37,10 @@
         $dataProvinsi[$i]['id'] = $id; 
         $dataProvinsi[$i]['nama'] = $name; 
         $dataProvinsi[$i]['jKota'] = $rsKota;
-        $dataProvinsi[$i]['jKecamatan'] = $rsKecamatan->num_rows();
-        $dataProvinsi[$i]['jKelurahan'] = $rsKelurahan->num_rows();
+        $dataProvinsi[$i]['jKecamatan'] = $rsKecamatan;
+        $dataProvinsi[$i]['jKelurahan'] = $rsKelurahan;
         $dataProvinsi[$i]['jTps'] = $rsTps;
-        $dataProvinsi[$i]['jPemilih'] = $rsPemilih->num_rows();
+        $dataProvinsi[$i]['jPemilih'] = $rsPemilih;
 
       }
       
