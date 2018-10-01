@@ -16,8 +16,7 @@
       parent::__construct();
     }
     
-    public function getAllData($offset = null, $limit = null){
-      
+    public function getAllData($offset = null, $limit = null, $search = null){
       if( $this->provinsi != null ){
         $this->db->where(array("provinsi" => $this->provinsi));
       } 
@@ -36,6 +35,10 @@
 
       if( $this->tps != null ){
         $this->db->where(array("tps" => $this->tps));
+      }
+
+      if( $search != null ){
+        $this->db->where("nama like '%".$search."%' or nik like '%".$search."%'");
       }
 
       $this->db->select(

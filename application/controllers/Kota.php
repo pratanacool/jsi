@@ -3,10 +3,10 @@
     function __construct(){
       parent ::__construct();
       $this->load->library('pagination');
+      $this->load->model('M_Kota', 'kota', true);
     }
 
     public function index(){
-      $this->load->model('M_Kota', 'kota', true);
       $this->load->model('M_Kecamatan', 'kecamatan', true);
       $this->load->model('M_Kelurahan', 'kelurahan', true);
       $this->load->model('M_Pemilih','pemilih',true);
@@ -59,7 +59,18 @@
 
     }    
 
-
+    public function listKota(){
+      $idProvinsi = $this->input->post("id");
+      
+      $this->kota->provinsi_id = $idProvinsi;
+      $rsKota = $this->kota->getAllData()->result();
+      $listKota = array();
+      $listKota[""] = "Pilih Kabupaten / Kota";
+      foreach ($rsKota as $value) {
+        $listKota[$value->id] = $value->name;
+      }
+      echo json_encode($listKota);
+    }
 
 
   }

@@ -3,10 +3,10 @@
     function __construct(){
       parent ::__construct();
       $this->load->library('pagination');
+      $this->load->model('M_Kecamatan', 'kecamatan', true);
     }
 
     public function index(){
-      $this->load->model('M_Kecamatan', 'kecamatan', true);
       $this->load->model('M_Kelurahan', 'kelurahan', true);
       $this->load->model('M_Pemilih','pemilih',true);
 
@@ -57,7 +57,18 @@
 
     }    
 
-
+    public function listKecamatan(){
+      $idKota = $this->input->post("id");
+      
+      $this->kecamatan->kota_id = $idKota;
+      $rsKecamatan = $this->kecamatan->getAllData()->result();
+      $listKecamatan = array();
+      $listKecamatan[""] = "Pilih Kecamatan";
+      foreach ($rsKecamatan as $value) {
+        $listKecamatan[$value->id] = $value->name;
+      }
+      echo json_encode($listKecamatan);
+    }
 
 
   }

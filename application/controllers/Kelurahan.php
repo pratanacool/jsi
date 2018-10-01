@@ -3,10 +3,10 @@
     function __construct(){
       parent ::__construct();
       $this->load->library('pagination');
+      $this->load->model('M_Kelurahan', 'kelurahan', true);
     }
 
     public function index(){
-      $this->load->model('M_Kelurahan', 'kelurahan', true);
       $this->load->model('M_Pemilih','pemilih',true);
 
       $idKecamatan = $this->uri->segment(3);
@@ -53,7 +53,18 @@
 
     }    
  
-
+    public function listKelurahan(){
+      $idKelurahan = $this->input->post("id");
+      
+      $this->kelurahan->kecamatan_id = $idKelurahan;
+      $rsKelurahan = $this->kelurahan->getAllData()->result();
+      $listKelurahan = array();
+      $listKelurahan[""] = "Pilih Kelurahan";
+      foreach ($rsKelurahan as $value) {
+        $listKelurahan[$value->id] = $value->name;
+      }
+      echo json_encode($listKelurahan);
+    }
 
 
 

@@ -188,22 +188,19 @@
 		} 
 	}
 
-  $("#tambah").click(function(){
-    var div = $(document.createElement('div')).attr("id",'pertanyaan'+a).attr("class","row");
+	$("#tambah").click(function(){
+		var div = $(document.createElement('div')).attr("id",'pertanyaan'+a).attr("class","row");
 
-    var pertanyaan = "<div class='input-field col s12 m5'>	<input name='pertanyaan[]' type='text'>	<label for='pertanyaan' >Pertanyaan</label>	</div>";
-    var jawaban = "<div class='input-field col s12 m6'>	<input name='jawaban[]' type='text'>	<label for='jawaban' >Jawaban</label>	</div>";
+		var pertanyaan = "<div class='input-field col s12 m5'>	<input name='pertanyaan[]' type='text'>	<label for='pertanyaan' >Pertanyaan</label>	</div>";
+		var jawaban = "<div class='input-field col s12 m6'>	<input name='jawaban[]' type='text'>	<label for='jawaban' >Jawaban</label>	</div>";
 
+		var tombol = "<a class='btn-floating waves-effect waves-light tooltipped red' data-tooltip='Hapus pertanyaan' onclick='hapus("+a+")' style='margin-top:15px'><i class='mdi-action-delete'></i></a>";			
 
+		div.after().html(pertanyaan + jawaban + tombol);
+		div.appendTo('#konten'); a++;
+	}); 
 
-
-	var tombol = "<a class='btn-floating waves-effect waves-light tooltipped red' data-tooltip='Hapus pertanyaan' onclick='hapus("+a+")' style='margin-top:15px'><i class='mdi-action-delete'></i></a>";			
-
-    div.after().html(pertanyaan + jawaban + tombol);
-    div.appendTo('#konten'); a++;
-  }); 
-
-  function hapus(id){
-    $("#pertanyaan"+id).remove();
-  }   
+	function hapus(id){
+		$("#pertanyaan"+id).remove();
+	}   
 </script>

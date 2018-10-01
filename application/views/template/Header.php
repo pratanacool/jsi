@@ -13,7 +13,7 @@
             <nav class="navbar-color">
                 <div class="nav-wrapper">
                     <ul class="left">                      
-                      <li><h1 class="logo-wrapper"><a href="index.html" class="brand-logo darken-1"><img src="<?php echo base_url('assets');?>/images/materializes-logo.png" alt="IDPT logo"></a> <span class="logo-text">IDPT</span></h1></li>
+                      <li><h1 class="logo-wrapper"><a href="index.html" class="brand-logo darken-1"><img src="<?php echo base_url('assets');?>/images/materializes-logo.png" alt="E-DPT logo"></a> <span class="logo-text">E-DPT</span></h1></li>
                     </ul>
                     <div class="header-search-wrapper hide-on-med-and-down">
                         <i class="mdi-action-search"></i>

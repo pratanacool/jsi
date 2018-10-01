@@ -17,19 +17,19 @@
       $rsPemilih = $this->pemilih->getAllData()->result();
       // $rsPemilih = $this->pemilih->getTotalData()->result();
       $pilihan = array("",
-                  "Partai saya dan caleg saya",
-                  "Partai saya tapi caleg lain (dari partai saya)",
-                  "Partai saya tetapi tidak tau calegnya siapa",
-                  "Partai lain dan caleg lain",
-                  "Tidak tau partai mana tetapi calegnya saya",
-                  "Tidak tau partai mana dan caleg siapa"
+                  "Partai saya dan caleg saya"=>"Partai saya dan caleg saya",
+                  "Partai saya tapi caleg lain (dari partai saya)"=>"Partai saya tapi caleg lain (dari partai saya)",
+                  "Partai saya tetapi tidak tau calegnya siapa"=>"Partai saya tetapi tidak tau calegnya siapa",
+                  "Partai lain dan caleg lain"=>"Partai lain dan caleg lain",
+                  "Tidak tau partai mana tetapi calegnya saya"=>"Tidak tau partai mana tetapi calegnya saya",
+                  "Tidak tau partai mana dan caleg siapa"=>"Tidak tau partai mana dan caleg siapa"
                  );
 
       $data['listPilihan'] = $pilihan;
       $data['judul'] = "Data Kecamatan";
       $data['breadcrumbs'] = "Provinsi;Kota;Kecamatan;Kelurahan;pemilih";
       $data['pemilih'] = $rsPemilih;
-      $this->render_page('pemilih',$data);
+      $this->render_page('pemilih/pemilih',$data);
     }    
 
     public function tps(){
@@ -67,7 +67,7 @@
       $data['breadcrumbs'] = "Provinsi;Kota;Kecamatan;Kelurahan;TPS";
       $data['tps'] = $dataPemilih;
       $data["paginator"] = $this->pagination->create_links();
-      $this->render_page('tps',$data);
+      $this->render_page('pemilih/tps',$data);
     }    
 
     public function simpan(){
@@ -123,7 +123,81 @@
       echo "selesai";
     }
 
+    public function simpanInterview(){
+      $this->load->model("M_Interview_master", "mInterview", true);
+      $this->load->model("M_Interview_detail", "dInterview", true);
 
+      $idPemilih = $this->input->post('id');
+      $idCaleg = $this->input->post('idCaleg');
+      $pertanyaan = $this->input->post('pertanyaan');
+      $jawaban = $this->input->post('jawaban');
+
+      $this->mInterview->caleg_id = $idCaleg;
+      $this->mInterview->pemilih_id = $idPemilih;
+      $this->mInterview->user_id = "1";
+
+
+      switch ($jawaban[0]) {
+        case "Partai saya dan caleg saya":
+        case "Tidak tau partai mana tetapi calegnya saya":
+          $this->mInterview->memilih = "1";
+          break;
+
+        default:
+          $this->mInterview->memilih = "0";
+          break;
+      }
+
+      $this->mInterview->simpan();
+      $idMaster = $this->mInterview->id;
+
+      for ($i = 0; $i < count($pertanyaan) ; $i++) {          
+          if($pertanyaan[$i]!="" && $jawaban[$i]!=""){
+            $this->dInterview->m_interview_id = $idMaster;
+            $this->dInterview->pertanyaan = $pertanyaan[$i];
+            $this->dInterview->jawaban = $jawaban[$i];
+            $this->dInterview->simpan();          
+          }
+      }
+      var_dump($pertanyaan);
+      var_dump($jawaban);
+      die();
+    }
+
+    public function list(){
+      $this->load->model("M_Provinsi");
+      $provinsi = $this->input->post('provinsi');
+      $kota = $this->input->post('kota');
+      $kecamatan = $this->input->post("kecamatan");
+      $kelurahan = $this->input->post("kelurahan");
+      $search = $this->input->post("search");
+      
+      $dPemilih = array();
+      
+      $data['judul'] = "List Pemilih";
+      $data['breadcrumbs'] = "";
+
+      $data['provinsi'] = $provinsi;
+      $data['kota'] = $kota;
+      $data['kecamatan'] = $kecamatan;
+      $data['kelurahan'] = $kelurahan;
+      $data['search'] = $search;
+      
+      if ($provinsi != "" or $search !="") {
+        $dPemilih = $this->pemilih->getAllData(null, null, $search)->result();
+      } 
+
+      $data['pemilih'] = $dPemilih;
+      $rsProvinsi = $this->M_Provinsi->getProvinsi()->result();
+
+      $listProvinsi[""] = "Pilih Provinsi";
+      foreach ($rsProvinsi as $value) {
+        $listProvinsi[$value->id] = $value->name;
+      }
+
+      $data['listProvinsi'] = $listProvinsi;
+      $this->render_page('pemilih/list', $data);
+    }
 
 
   }
