@@ -132,6 +132,20 @@
 	        	</div>
 			</div>
 
+          <div class="row" id="pertanyaan2">
+            <div class='input-field col s12 m5'>  <input name='pertanyaan[]' type='text' value="Jumlah pemilih dalam satu rumah" readonly="true"> <label for='pertanyaan' >Pertanyaan</label> </div>
+            <div class='input-field col s12 m6'>
+              <input name='jawaban[]' type='text'>  <label for='jawaban' >Jawaban</label>
+            </div>
+          </div>
+
+          <div class="row" id="pertanyaan3">
+            <div class='input-field col s12 m5'>  <input name='pertanyaan[]' type='text' value="Nomor kontak" readonly="true"> <label for='pertanyaan' >Pertanyaan</label> </div>
+            <div class='input-field col s12 m6'>
+              <input name='jawaban[]' type='text'>  <label for='jawaban' >Jawaban</label>
+            </div>
+          </div>			
+
 		</div>
 
 		<div class="modal-footer">
@@ -145,7 +159,7 @@
 <!-- /modal form -->
 
 <script type="text/javascript">
-	var a=2;
+	var a=4;
 	window.setTimeout(function() {
 	    $("#card-alert").fadeTo(500, 0).slideUp(500, function(){
 	        $(this).remove(); 

@@ -31,6 +31,15 @@
       
       
       return true;
+    }
+
+    public function viewInterview(){
+      $this->db->select("m.waktu, d.pertanyaan, d.jawaban");
+      $this->db->join("d_interview d","m.id = d.m_interview_id", "left");       
+      $this->db->where("caleg_id", $this->caleg_id);
+      $this->db->where("pemilih_id", $this->pemilih_id);
+      $data = $this->db->get("m_interview m");
+      return $data->result();
     }     
 
   }

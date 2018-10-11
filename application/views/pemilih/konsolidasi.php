@@ -24,7 +24,7 @@
     <div class="card-panel">
       <div class="row">
 
-        <form class="col s12" action="<?php echo base_url();?>pemilih/list" method="post">
+        <form class="col s12" action="<?php echo base_url();?>pemilih/konsolidasi" method="post">
         <!-- <div class="col s12"> -->
           <h4 class="header2">Filter</h4>
           <div class="row">
@@ -60,19 +60,15 @@
               <label for="icon_prefix">Kelurahan</label>
             </div>
             
-            <div class="input-field col s5">
-              <input placeholder="Nama / NIk" type="text" name="search" value="<?php echo $search;?>">
-              <label for="icon_email">Nama / Nik</label>
-            </div>
-            
-            <div class="input-field col s1">
+
+            <div class="input-field col s1  offset-s9">
               <?php
                 echo form_dropdown('limit', $listLimit, $limit);
               ?>
               <label for="icon_prefix">Banyak Data</label>
             </div>
 
-            <div class="input-field col s2 offset-s4">
+            <div class="input-field col s2">
               <div class="input-field col s12">
                 <button class="btn cyan waves-effect waves-light right-align" type="submit" name="action" value="search"><i class="mdi-action-search"></i> Cari</button>
               </div>
@@ -91,18 +87,20 @@
   <div class="col s12 m12 l12">
     <div class="card-panel">
       <div class="row">          
-        
         <code>Total Pemilih : <?php echo $totalData;?></code>
         <table id="table striped demo1">
             <thead>
               <tr>
                 <th data-field="id">NIK</th>
                 <th>Nama</th>
-                <th>Tempat Lahir</th>
-                <th>Tanggal Lahir</th>
-                <th>Gender</th>
+                <th>Provinsi</th>
+                <th>Kota</th>
+                <th>Kecamatan</th>
                 <th>Kelurahan</th>
                 <th>TPS</th>
+                <th>Pilihan anda di pilleg</th>
+                <th>Jumlah pemilih</th>
+                <th>Nomor Kontak</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -110,19 +108,20 @@
             <tbody>
             <?php
               foreach ($pemilih as $row) {
+                $id = $row['id'];
                 echo "<tr>";
-                  echo "<td id='nik$row->id'>".$row->nik."</td>";
-                  echo "<td id='nama$row->id'>".$row->nama."</td>";
-                  echo "<td id='tempatLahir$row->id'>".$row->tempat_lahir."</td>";
-                  echo "<td id='tglLahir$row->id'>".$row->tanggal_lahir."</td>";
-                  echo "<td id='gender$row->id'>".$row->gender."</td>";
-                  echo "<td>".$row->nama_kelurahan."</td>";
-                  echo "<td>TPS ".$row->tps."</td>";
+                  echo "<td id='nik{$id}'>".$row['nik']."</td>";
+                  echo "<td id='nama{$id}'>".$row['nama']."</td>";
+                  echo "<td>".$row['nama_provinsi']."</td>";
+                  echo "<td>".$row['nama_kota']."</td>";
+                  echo "<td>".$row['nama_kecamatan']."</td>";
+                  echo "<td>".$row['nama_kelurahan']."</td>";
+                  echo "<td>TPS ".$row['tps']."</td>";
+                  echo "<td>".$row['pilihan']."</td>";
+                  echo "<td>".$row['jumPemilih']."</td>";
+                  echo "<td>".$row['kontak']."</td>";
                   echo "<td>";
-                    echo "<a class='btn-floating waves-effect waves-light tooltipped modal-trigger orange' data-tooltip='Edit data pemilih' href='#modalEdit' onclick='edit($row->id)'><i class='mdi-editor-mode-edit' alt='edit'></i></a>"; 
-                      if($row->memilih == 0){
-                        echo " | <a class='btn-floating waves-effect waves-light tooltipped modal-trigger blue' data-tooltip='Interview pemilih' onclick='edit($row->id)' href='#modalInterview'><i class='mdi-action-assignment'></i></a>";
-                      }
+                    echo "<a class='btn-floating waves-effect waves-light tooltipped modal-trigger blue' data-tooltip='Interview pemilih' onclick='edit($id)' href='#modalInterview'><i class='mdi-action-assignment'></i></a>";
                   echo "</td>";
                 echo "</tr>";
               }
@@ -138,105 +137,16 @@
 </div>
 
 <!-- modal form -->
-            
-    <div id="modalEdit" class="modal modal-fixed-footer">
-      <form action="<?php echo base_url();?>pemilih/simpan" method="POST" id="formKu" enctype="multipart/form-data">
-        <div class="modal-content">
-
-          <h4 class="header2">Data Pemilih</h4>
-          <input id="id" name="id" type="hidden" >
-          <div class="row">
-            <div class="input-field col s12">
-              <input id="nik" name="nik" type="text">
-              <label for="nik" id="lnik">NIK</label>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="input-field col s12">
-              <input id="nama" name="nama" type="text">
-              <label for="nama" id="lnama">Nama</label>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="input-field col s12">
-              <input id="tempatLahir" name="tempatLahir" type="text">
-              <label for="tempatLahir" id="ltempatLahir">Tempat Lahir</label>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="input-field col s12">
-              <input id="tanggalLahir" name="tanggalLahir" type="date" class="datepicker">
-              <label for="tanggalLahir" id="ltanggalLahir">Tanggal Lahir</label>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="input-field col s12">
-              Gender : <br>
-              <div class="switch">
-                <label  style="margin-top: 18px">
-                            L
-                            <input type="checkbox" name="gender" id="gender" value="P">
-                            <span class="lever"></span> P
-                          </label>
-                      </div>
-              
-            </div>
-          </div>
-        </div>
-
-        <div class="modal-footer">
-          <button class="btn cyan waves-effect waves-light right" type="submit" name="action">Simpan <i class="mdi-content-send right"></i> </button>
-
-          <a href="#" class="btn red waves-effect waves-light right modal-action modal-close">Batal <i class="mdi-content-clear right"></i></a>
-        </div>
-      </form>
-    </div>
-
 
     <div id="modalInterview" class="modal modal-fixed-footer">
-      <form action="<?php echo base_url();?>pemilih/simpanInterview" method="POST" id="formKu" enctype="multipart/form-data">
         <div class="modal-content" id="konten">
-
-          <h4 class="header2">Form Kuesioner</h4>
-          <input id="id2" name="id" type="hidden">
-          <input name="idCaleg" type="hidden" value="1">
           
-          <div class="row" id="pertanyaan1">
-            <div class='input-field col s12 m5'>  <input name='pertanyaan[]' type='text' value="Pilihan anda di pilleg" readonly="true"> <label for='pertanyaan' >Pertanyaan</label> </div>
-            <div class='input-field col s12 m6'>
-              <!-- <label>Pilihan anda</label> -->
-                    <?php
-                      echo form_dropdown('jawaban[]', $listPilihan,'id="pilihan"');
-                    ?>
-                </div>
-          </div>
-
-          <div class="row" id="pertanyaan2">
-            <div class='input-field col s12 m5'>  <input name='pertanyaan[]' type='text' value="Jumlah pemilih dalam satu rumah" readonly="true"> <label for='pertanyaan' >Pertanyaan</label> </div>
-            <div class='input-field col s12 m6'>
-              <input name='jawaban[]' type='text'>  <label for='jawaban' >Jawaban</label>
-            </div>
-          </div>
-
-          <div class="row" id="pertanyaan3">
-            <div class='input-field col s12 m5'>  <input name='pertanyaan[]' type='text' value="Nomor kontak" readonly="true"> <label for='pertanyaan' >Pertanyaan</label> </div>
-            <div class='input-field col s12 m6'>
-              <input name='jawaban[]' type='text'>  <label for='jawaban' >Jawaban</label>
-            </div>
-          </div>
 
         </div>
 
         <div class="modal-footer">
-          <button class="btn cyan waves-effect waves-light right" type="submit" name="action">Simpan <i class="mdi-content-send right"></i> </button>
-          <a href="#" class="btn red waves-effect waves-light right modal-action modal-close">Batal <i class="mdi-content-clear right"></i></a>
-          <a class="btn blue waves-effect waves-light right" id="tambah">Tambah Pertanyaan<i class="mdi-editor-border-color right"></i></a>
+          <a href="#" class="btn red waves-effect waves-light right modal-action modal-close">Tutup <i class="mdi-content-clear right"></i></a>
         </div>
-      </form>
     </div>
 
 <!-- /modal form -->
@@ -357,7 +267,7 @@
     });
   }
 
-  var a=4;
+  var a=3;
   window.setTimeout(function() {
       $("#card-alert").fadeTo(500, 0).slideUp(500, function(){
           $(this).remove(); 
@@ -377,43 +287,30 @@
   function edit(id) {
     var nik = $("#nik"+id).text();
     var nama = $("#nama"+id).text();
-    var tempatLahir = $("#tempatLahir"+id).text();
-    var tglLahir = $("#tglLahir"+id).text();
-    var gender = $("#gender"+id).text();
+    $.post('<?php echo base_url();?>pemilih/getInterview', {idPemilih:id},
+      function(data, response) {
+      try{
+          var interview = "<h4 class='header2'>Hasil Konsolidasi "+nama+" ("+nik+")</h4>";
+          $("#konten").empty();
+          var hasil = jQuery.parseJSON(data);
+          j=0;
+          $.each(hasil, function(i, item){
+            j++;
 
-    $("#id").val(id);
-    $("#id2").val(id);
-    $("#nik").val(nik);
-    $("#lnik").addClass("active"); 
+            interview +="<div class='row'>";
+            interview +="<div class='input-field col m1'><code>"+ j +"</code></div>";
+            interview +="<div class='input-field col m5'><strong>"+item.pertanyaan+"</strong></div>";
+            interview +="<div class='input-field col m6'>"+item.jawaban+"</div>";
+            interview +="</div>";
 
-    $("#nama").val(nama); 
-    $("#lnama").addClass("active");
-
-    $("#tempatLahir").val(tempatLahir); 
-    $("#ltempatLahir").addClass("active");
-
-    $("#tanggalLahir").val(tglLahir);
-    $("#ltanggalLahir").addClass("active");
-
-    if (gender == "P") {
-      $("#gender").prop('checked', true);
-    } 
+            console.log(item)
+          });
+          $("#konten").append(interview);
+      }
+      catch(ex){
+        console.log("error "+ex);
+      }
+    });
   }
-
-  $("#tambah").click(function(){
-    var div = $(document.createElement('div')).attr("id",'pertanyaan'+a).attr("class","row");
-
-    var pertanyaan = "<div class='input-field col s12 m5'>  <input name='pertanyaan[]' type='text'> <label for='pertanyaan' >Pertanyaan</label> </div>";
-    var jawaban = "<div class='input-field col s12 m6'> <input name='jawaban[]' type='text'>  <label for='jawaban' >Jawaban</label> </div>";
-
-    var tombol = "<a class='btn-floating waves-effect waves-light tooltipped red' data-tooltip='Hapus pertanyaan' onclick='hapus("+a+")' style='margin-top:15px'><i class='mdi-action-delete'></i></a>";      
-
-    div.after().html(pertanyaan + jawaban + tombol);
-    div.appendTo('#konten'); a++;
-  }); 
-
-  function hapus(id){
-    $("#pertanyaan"+id).remove();
-  } 
 
 </script>

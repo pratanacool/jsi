@@ -11,6 +11,7 @@
     public $kecamatan;
     public $kelurahan;
     public $tps;
+    public $memilih;
 
     function __construct(){
       parent::__construct();
@@ -41,10 +42,15 @@
         $this->db->where("nama like '%".$search."%' or nik like '%".$search."%'");
       }
 
+      if( $this->memilih != null ){
+        $this->db->where("memilih", $this->memilih);
+      }
+
       $this->db->select(
-        "pemilih.*"
+        "pemilih.*, kelurahan.name as nama_kelurahan"
       );
       $this->db->from("pemilih");
+      $this->db->join("kelurahan","kelurahan.id = pemilih.kelurahan","left");
       $this->db->order_by("pemilih.tps","asc");
       $this->db->order_by("pemilih.nama","asc");
       $this->db->limit($limit, $offset);
@@ -52,7 +58,7 @@
       return $result;
     }
 
-    public function getTotalData($offset = null, $limit = null){
+    public function getTotalData($search = null){
       
       if( $this->provinsi != null ){
         $this->db->where(array("provinsi" => $this->provinsi));
@@ -74,12 +80,20 @@
         $this->db->where(array("tps" => $this->tps));
       }
 
+      if( $search != null ){
+        $this->db->where("nama like '%".$search."%' or nik like '%".$search."%'");
+      }
+
+      if( $this->memilih != null ){
+        $this->db->where("memilih", $this->memilih);
+      }
+
       $this->db->select(
-        "count(*)"
+        "count(*) as total"
       );
       $this->db->from("pemilih");
       $result = $this->db->get();
-      return $result;
+      return $result->row()->total;  
     }
 
     public function getAllDataTps($type, $key, $offset, $limit){
@@ -206,6 +220,10 @@
 
       if(isset($this->tps)){
         $data['tps'] = $this->tps;
+      }      
+
+      if(isset($this->memilih)){
+        $data['memilih'] = $this->memilih;
       }
 
       if(isset($this->id)){

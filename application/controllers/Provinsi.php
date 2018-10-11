@@ -12,8 +12,7 @@
       $this->load->model('M_Kelurahan', 'kelurahan', true);
       $this->load->model('M_Pemilih','pemilih',true);
       $dataProvinsi = array();
-      
-      $limit = 5;      
+      $limit = 10;      
       $offset = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
 
       $config['per_page'] = $limit;      
@@ -31,7 +30,7 @@
         $rsKota = $this->kota->getTotalData();
         $rsKecamatan = $this->kecamatan->getKecamatan("provinsi",$id);
         $rsKelurahan = $this->kelurahan->getKelurahan("provinsi",$id);
-        $rsTps = $this->pemilih->getTotalDataTps("provinsi",$id);
+        // $rsTps = $this->pemilih->getTotalDataTps("provinsi",$id);
         $rsPemilih = $this->pemilih->getPemilih("provinsi",$id);
 
         $dataProvinsi[$i]['id'] = $id; 
@@ -39,7 +38,7 @@
         $dataProvinsi[$i]['jKota'] = $rsKota;
         $dataProvinsi[$i]['jKecamatan'] = $rsKecamatan;
         $dataProvinsi[$i]['jKelurahan'] = $rsKelurahan;
-        $dataProvinsi[$i]['jTps'] = $rsTps;
+        // $dataProvinsi[$i]['jTps'] = $rsTps;
         $dataProvinsi[$i]['jPemilih'] = $rsPemilih;
 
       }
@@ -49,6 +48,7 @@
       $data['breadcrumbs'] = "Provinsi";
       $data['provinsi'] = $dataProvinsi;
       $data["paginator"] = $this->pagination->create_links();
+      
       $this->render_page('provinsi',$data);
 
     }

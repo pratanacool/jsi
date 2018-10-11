@@ -68,5 +68,19 @@
     	return $result->row()->total;
     }
 
+    public function getData(){
+      if($this->id != ""){
+        $this->db->where("id", $this->id);
+      }
+
+      if($this->name != ""){
+        $this->db->like("name", $this->name);
+      }
+
+      $data = $this->db->get("kelurahan")->row();
+      $this->name = $data->name;
+      return true;
+    }
+
   }
 ?>

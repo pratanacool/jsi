@@ -5,7 +5,7 @@
 			<th>Kabupaten / Kota</th>
 			<th>Kecamatan</th>
 			<th>Kelurahan</th>
-			<th>TPS</th>
+			<!-- <th>TPS</th> -->
 			<th>Pemilih</th>
 		</tr>
 	</thead>
@@ -17,7 +17,7 @@
 					echo "<td> <a href='".base_url('kota/index/').$row['id']."/0' >".$row['jKota']."</a> </td>";
 					echo "<td>".$row['jKecamatan']."</td>";
 					echo "<td>".$row['jKelurahan']."</td>";
-					echo "<td>".$row['jTps']."</td>";
+					// echo "<td>".$row['jTps']."</td>";
 					echo "<td>".$row['jPemilih']."</td>";
 				echo "</tr>";
 			}

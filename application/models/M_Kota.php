@@ -63,6 +63,20 @@
     	return $result;
     }
 
+    public function getData(){
+      if($this->id != ""){
+        $this->db->where("id", $this->id);
+      }
+
+      if($this->name != ""){
+        $this->db->like("name", $this->name);
+      }
+
+      $data = $this->db->get("kota")->row();
+      $this->name = $data->name;
+      return true;
+    }
+
 
   }
 ?>

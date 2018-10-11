@@ -12,6 +12,9 @@
       $this->db->select('*');
         $this->db->order_by('name','asc');
         $this->db->limit($limit, $offset);
+        if ($this->id !="") {
+          $this->db->where("id", $this->id);
+        }
         $result = $this->db->get('provinsi');
 
       return $result;
@@ -22,6 +25,21 @@
       $result = $this->db->get('provinsi');
     	return $result->row()->total;
     } 
+
+    public function getData(){
+      if($this->id != ""){
+        $this->db->where("id", $this->id);
+      }
+
+      if($this->name != ""){
+        $this->db->like("name", $this->name);
+      }
+
+      $data = $this->db->get("provinsi")->row();
+      $this->name = $data->name;
+      return true;
+
+    }
 
   }
 ?>

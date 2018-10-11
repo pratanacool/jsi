@@ -6,21 +6,8 @@
                     <img src="images/avatar.jpg" alt="" class="circle responsive-img valign profile-image">
                 </div>
                 <div class="col col s8 m8 l8">
-                    <ul id="profile-dropdown" class="dropdown-content">
-                        <li><a href="#"><i class="mdi-action-face-unlock"></i> Profile</a>
-                        </li>
-                        <li><a href="#"><i class="mdi-action-settings"></i> Settings</a>
-                        </li>
-                        <li><a href="#"><i class="mdi-communication-live-help"></i> Help</a>
-                        </li>
-                        <li class="divider"></li>
-                        <li><a href="#"><i class="mdi-action-lock-outline"></i> Lock</a>
-                        </li>
-                        <li><a href="#"><i class="mdi-hardware-keyboard-tab"></i> Logout</a>
-                        </li>
-                    </ul>
-                    <a class="btn-flat dropdown-button waves-effect waves-light white-text profile-btn" href="#" data-activates="profile-dropdown">John Doe<i class="mdi-navigation-arrow-drop-down right"></i></a>
-                    <p class="user-roal">Administrator</p>
+                    <a class="btn-flat dropdown-button waves-effect waves-light white-text profile-btn" href="#" data-activates="profile-dropdown"><?php echo namaCaleg;?></a>
+                    <p class="user-roal"><?php echo partai;?></p>
                 </div>
             </div>
         </li>
@@ -30,6 +17,7 @@
 
         <li class="li-hover"><div class="divider"></div></li>
         <li class="bold"><a href="<?php echo base_url();?>pemilih/list" class="waves-effect waves-cyan"><i class="mdi-social-group"></i> Pemilih</a>
+        <li class="bold"><a href="<?php echo base_url();?>pemilih/konsolidasi" class="waves-effect waves-cyan"><i class="mdi-action-assignment-turned-in"></i> Konsolidasi</a>
 
     </ul>
 

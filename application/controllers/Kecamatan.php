@@ -15,8 +15,7 @@
       $this->kecamatan->kota_id = $idKota;
       $dataKecamatan = array();
       
-      $limit = 5;      
-
+      $limit = 10;      
 
       $page = $this->uri->segment(5);
 
@@ -37,19 +36,19 @@
         $name = $rsKecamatan[$i]->name;
 
         $rsKelurahan = $this->kelurahan->getKelurahan("kecamatan",$id);
-        $rsTps = $this->pemilih->getTotalDataTps("kecamatan",$id);
+        // $rsTps = $this->pemilih->getTotalDataTps("kecamatan",$id);
         $rsPemilih = $this->pemilih->getPemilih("kecamatan",$id);
 
         $dataKecamatan[$i]['id'] = $id; 
         $dataKecamatan[$i]['nama'] = $name; 
         $dataKecamatan[$i]['jKelurahan'] = $rsKelurahan;
-        $dataKecamatan[$i]['jTps'] = $rsTps;
+        // $dataKecamatan[$i]['jTps'] = $rsTps;
         $dataKecamatan[$i]['jPemilih'] = $rsPemilih;
 
       }
       $this->pagination->initialize($config);
       $data['judul'] = "Data Kecamatan";
-      $data['breadcrumbs'] = "Provinsi;Kota;Kecamatan";
+      $data['breadcrumbs'] = $this->getBreadcrumbs($idKota);
       $data['kecamatan'] = $dataKecamatan;
       $data["paginator"] = $this->pagination->create_links();
       // var_dump($data);die();

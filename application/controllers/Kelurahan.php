@@ -35,18 +35,18 @@
         $id = $rsKelurahan[$i]->id;
         $name = $rsKelurahan[$i]->name;
 
-        $rsTps = $this->pemilih->getTotalDataTps("kelurahan",$id);
+        // $rsTps = $this->pemilih->getTotalDataTps("kelurahan",$id);
         $rsPemilih = $this->pemilih->getPemilih("kelurahan",$id);
 
         $dataKelurahan[$i]['id'] = $id; 
         $dataKelurahan[$i]['nama'] = $name; 
-        $dataKelurahan[$i]['jTps'] = $rsTps;
+        // $dataKelurahan[$i]['jTps'] = $rsTps;
         $dataKelurahan[$i]['jPemilih'] = $rsPemilih;
 
       }
       $this->pagination->initialize($config);
       $data['judul'] = "Data Kecamatan";
-      $data['breadcrumbs'] = "Provinsi;Kota;Kecamatan;Kelurahan";
+      $data['breadcrumbs'] = $this->getBreadcrumbs($idKecamatan);
       $data['kelurahan'] = $dataKelurahan;
       $data["paginator"] = $this->pagination->create_links();
       $this->render_page('kelurahan',$data);
