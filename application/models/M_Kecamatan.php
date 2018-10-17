@@ -75,8 +75,13 @@
       }
 
       $data = $this->db->get("kecamatan")->row();
-      $this->name = $data->name;
-      return true;
+      if($data){
+          $this->name = $data->name;
+          return true;
+      }
+      else{
+        return false;
+      }
     }
 
   }

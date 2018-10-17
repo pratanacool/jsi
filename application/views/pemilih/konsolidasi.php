@@ -61,7 +61,14 @@
             </div>
             
 
-            <div class="input-field col s1  offset-s9">
+            <div class="input-field col s4">
+              <?php
+                echo form_dropdown('pilihan', $listPilihan, $pilihan);
+              ?>
+              <label for="icon_prefix">Kategori</label>
+            </div>  
+
+            <div class="input-field col s1  offset-s5">
               <?php
                 echo form_dropdown('limit', $listLimit, $limit);
               ?>
@@ -87,7 +94,18 @@
   <div class="col s12 m12 l12">
     <div class="card-panel">
       <div class="row">          
-        <code>Total Pemilih : <?php echo $totalData;?></code>
+        <code>Total Data Ditemukan: <?php echo $totalData;?> Orang</code> 
+        <hr>
+        <code>Pemilih Yang Dikunjungi : <?php echo $totalKonsolidasi;?> Orang</code>
+        <hr>        
+        <code>Pemilih Kategori A : <?php echo $totalA;?> Orang</code><br>
+        <code>Pemilih Kategori B : <?php echo $totalB;?> Orang</code><br>
+        <code>Pemilih Kategori C : <?php echo $totalC;?> Orang</code><br>
+        <code>Pemilih Kategori D : <?php echo $totalD;?> Orang</code><br>
+        <code>Pemilih Kategori E : <?php echo $totalE;?> Orang</code>
+        <hr>        
+        <code>Potensi Pemilih: <?php echo $totalA + $totalB + $totalC;?> Orang</code>
+        <hr>        
         <table id="table striped demo1">
             <thead>
               <tr>
@@ -98,7 +116,7 @@
                 <th>Kecamatan</th>
                 <th>Kelurahan</th>
                 <th>TPS</th>
-                <th>Pilihan anda di pilleg</th>
+                <th>Pilihan pilleg</th>
                 <th>Jumlah pemilih</th>
                 <th>Nomor Kontak</th>
                 <th>Action</th>
@@ -117,10 +135,10 @@
                   echo "<td>".$row['nama_kecamatan']."</td>";
                   echo "<td>".$row['nama_kelurahan']."</td>";
                   echo "<td>TPS ".$row['tps']."</td>";
-                  echo "<td>".$row['pilihan']."</td>";
-                  echo "<td>".$row['jumPemilih']."</td>";
-                  echo "<td>".$row['kontak']."</td>";
-                  echo "<td>";
+                  echo "<td style='text-align:center'>".$row['pilihan']."</td>";
+                  echo "<td style='text-align:right'>".$row['jumPemilih']."</td>";
+                  echo "<td style='text-align:right'>".$row['kontak']."</td>";
+                  echo "<td style='text-align:center'>";
                     echo "<a class='btn-floating waves-effect waves-light tooltipped modal-trigger blue' data-tooltip='Interview pemilih' onclick='edit($id)' href='#modalInterview'><i class='mdi-action-assignment'></i></a>";
                   echo "</td>";
                 echo "</tr>";
@@ -152,6 +170,14 @@
 <!-- /modal form -->
 
 <script type="text/javascript">
+
+  var pilihan ={
+                  "A":"Partai saya dan caleg saya",
+                  "B":"Partai saya tapi caleg lain (dari partai lain)",
+                  "C":"Partai saya tetapi tidak tau calegnya siapa",
+                  "D":"Partai lain dan caleg lain",
+                  "E":"Tidak tau partai mana tetapi calegnya caleg saya"
+                };
   setKota();
   setKecamatan();
   setKelurahan();
@@ -296,11 +322,16 @@
           j=0;
           $.each(hasil, function(i, item){
             j++;
-
+            jawabanPemilih = item.jawaban;
             interview +="<div class='row'>";
             interview +="<div class='input-field col m1'><code>"+ j +"</code></div>";
             interview +="<div class='input-field col m5'><strong>"+item.pertanyaan+"</strong></div>";
-            interview +="<div class='input-field col m6'>"+item.jawaban+"</div>";
+
+            if(j == 1){
+             jawabanPemilih = pilihan[item.jawaban]; 
+            }
+
+            interview +="<div class='input-field col m6'>"+jawabanPemilih+"</div>";
             interview +="</div>";
 
             console.log(item)

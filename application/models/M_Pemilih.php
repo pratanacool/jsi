@@ -12,6 +12,7 @@
     public $kelurahan;
     public $tps;
     public $memilih;
+    public $pilihan;
 
     function __construct(){
       parent::__construct();
@@ -43,14 +44,20 @@
       }
 
       if( $this->memilih != null ){
-        $this->db->where("memilih", $this->memilih);
+        $this->db->where("caleg_id", $this->memilih);
+      }      
+
+      if( $this->pilihan != '0' ){
+        $this->db->where("m_interview.memilih", $this->pilihan);
       }
 
       $this->db->select(
-        "pemilih.*, kelurahan.name as nama_kelurahan"
+        "pemilih.*, kelurahan.name as nama_kelurahan, m_interview.memilih, m_interview.banyak_pemilih, m_interview.kontak"
       );
       $this->db->from("pemilih");
+      $this->db->join("m_interview","m_interview.pemilih_id = pemilih.id", "left");
       $this->db->join("kelurahan","kelurahan.id = pemilih.kelurahan","left");
+
       $this->db->order_by("pemilih.tps","asc");
       $this->db->order_by("pemilih.nama","asc");
       $this->db->limit($limit, $offset);
@@ -85,13 +92,18 @@
       }
 
       if( $this->memilih != null ){
-        $this->db->where("memilih", $this->memilih);
+        $this->db->where("caleg_id", $this->memilih);
+      }
+
+      if( $this->pilihan != '0' ){
+        $this->db->where("m_interview.memilih", $this->pilihan);
       }
 
       $this->db->select(
         "count(*) as total"
       );
       $this->db->from("pemilih");
+      $this->db->join("m_interview","m_interview.pemilih_id = pemilih.id", "left");
       $result = $this->db->get();
       return $result->row()->total;  
     }
@@ -236,6 +248,46 @@
 
       return true;
     }
+
+    public function getTotalDataPemilih(){
+      
+      if( $this->provinsi != null ){
+        $this->db->where(array("provinsi" => $this->provinsi));
+      } 
+
+      if( $this->kota != null ){
+        $this->db->where(array("kota" => $this->kota));
+      }
+
+      if( $this->kecamatan != null ){
+        $this->db->where(array("kecamatan" => $this->kecamatan));
+      }
+
+      if( $this->kelurahan != null ){
+        $this->db->where(array("kelurahan" => $this->kelurahan));
+      }
+
+      if( $this->tps != null ){
+        $this->db->where(array("tps" => $this->tps));
+      }
+
+      if( $this->memilih != null ){
+        $this->db->where("caleg_id", $this->memilih);
+      }
+
+      if( $this->pilihan != '0' ){
+        $this->db->where("m_interview.memilih", $this->pilihan);
+      }
+
+      $this->db->select(
+        "sum(m_interview.banyak_pemilih) as total"
+      );
+      $this->db->from("pemilih");
+      $this->db->join("m_interview","m_interview.pemilih_id = pemilih.id", "left");
+      $result = $this->db->get();
+      return $result->row()->total;  
+    }
+
 
   }
 

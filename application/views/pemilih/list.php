@@ -99,8 +99,7 @@
                 <th data-field="id">NIK</th>
                 <th>Nama</th>
                 <th>Tempat Lahir</th>
-                <th>Tanggal Lahir</th>
-                <th>Gender</th>
+                <th>Kecamatan</th>
                 <th>Kelurahan</th>
                 <th>TPS</th>
                 <th>Action</th>
@@ -110,18 +109,18 @@
             <tbody>
             <?php
               foreach ($pemilih as $row) {
+                $id = $row['id'];
                 echo "<tr>";
-                  echo "<td id='nik$row->id'>".$row->nik."</td>";
-                  echo "<td id='nama$row->id'>".$row->nama."</td>";
-                  echo "<td id='tempatLahir$row->id'>".$row->tempat_lahir."</td>";
-                  echo "<td id='tglLahir$row->id'>".$row->tanggal_lahir."</td>";
-                  echo "<td id='gender$row->id'>".$row->gender."</td>";
-                  echo "<td>".$row->nama_kelurahan."</td>";
-                  echo "<td>TPS ".$row->tps."</td>";
+                  echo "<td id='nik{$id}'>".$row['nik']."</td>";
+                  echo "<td id='nama{$id}'>".$row['nama']."</td>";
+                  echo "<td id='tempatLahir{$id}'>".$row['tempat_lahir']."</td>";
+                  echo "<td>".$row['nama_kecamatan']."</td>";
+                  echo "<td>".$row['nama_kelurahan']."</td>";
+                  echo "<td>TPS ".$row['tps']."</td>";
                   echo "<td>";
-                    echo "<a class='btn-floating waves-effect waves-light tooltipped modal-trigger orange' data-tooltip='Edit data pemilih' href='#modalEdit' onclick='edit($row->id)'><i class='mdi-editor-mode-edit' alt='edit'></i></a>"; 
-                      if($row->memilih == 0){
-                        echo " | <a class='btn-floating waves-effect waves-light tooltipped modal-trigger blue' data-tooltip='Interview pemilih' onclick='edit($row->id)' href='#modalInterview'><i class='mdi-action-assignment'></i></a>";
+                    echo "<a class='btn-floating waves-effect waves-light tooltipped modal-trigger orange' data-tooltip='Edit data pemilih' href='#modalEdit' onclick='edit({$id})'><i class='mdi-editor-mode-edit' alt='edit'></i></a>"; 
+                      if($row['memilih'] == 0){
+                        echo " | <a class='btn-floating waves-effect waves-light tooltipped modal-trigger blue' data-tooltip='Interview pemilih' onclick='edit({$id})' href='#modalInterview'><i class='mdi-action-assignment'></i></a>";
                       }
                   echo "</td>";
                 echo "</tr>";
@@ -165,27 +164,6 @@
               <label for="tempatLahir" id="ltempatLahir">Tempat Lahir</label>
             </div>
           </div>
-
-          <div class="row">
-            <div class="input-field col s12">
-              <input id="tanggalLahir" name="tanggalLahir" type="date" class="datepicker">
-              <label for="tanggalLahir" id="ltanggalLahir">Tanggal Lahir</label>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="input-field col s12">
-              Gender : <br>
-              <div class="switch">
-                <label  style="margin-top: 18px">
-                            L
-                            <input type="checkbox" name="gender" id="gender" value="P">
-                            <span class="lever"></span> P
-                          </label>
-                      </div>
-              
-            </div>
-          </div>
         </div>
 
         <div class="modal-footer">
@@ -203,7 +181,7 @@
 
           <h4 class="header2">Form Kuesioner</h4>
           <input id="id2" name="id" type="hidden">
-          <input name="idCaleg" type="hidden" value="1">
+          <input name="idCaleg" type="hidden" value="<?php echo idCaleg;?>">
           
           <div class="row" id="pertanyaan1">
             <div class='input-field col s12 m5'>  <input name='pertanyaan[]' type='text' value="Pilihan anda di pilleg" readonly="true"> <label for='pertanyaan' >Pertanyaan</label> </div>
@@ -392,12 +370,12 @@
     $("#tempatLahir").val(tempatLahir); 
     $("#ltempatLahir").addClass("active");
 
-    $("#tanggalLahir").val(tglLahir);
-    $("#ltanggalLahir").addClass("active");
+    // $("#tanggalLahir").val(tglLahir);
+    // $("#ltanggalLahir").addClass("active");
 
-    if (gender == "P") {
-      $("#gender").prop('checked', true);
-    } 
+    // if (gender == "P") {
+    //   $("#gender").prop('checked', true);
+    // } 
   }
 
   $("#tambah").click(function(){

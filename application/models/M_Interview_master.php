@@ -7,6 +7,8 @@
     public $waktu;
     public $user_id;
     public $memilih;
+    public $banyak_pemilih;
+    public $kontak;
 
   	function __construct()
     {
@@ -18,6 +20,8 @@
       $data['pemilih_id'] = $this->pemilih_id;
       $data['user_id'] = $this->user_id;
       $data['memilih'] = $this->memilih;
+      $data['banyak_pemilih'] = $this->banyak_pemilih;
+      $data['kontak'] = $this->kontak;
 
       if ($this->id != "") {
         $where['id'] = $this->id;
