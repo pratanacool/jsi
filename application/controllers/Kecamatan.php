@@ -62,7 +62,6 @@
       $this->kecamatan->kota_id = $idKota;
       $rsKecamatan = $this->kecamatan->getAllData()->result();
       $listKecamatan = array();
-      $listKecamatan[""] = "Pilih Kecamatan";
       foreach ($rsKecamatan as $value) {
         $listKecamatan[$value->id] = $value->name;
       }

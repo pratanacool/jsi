@@ -66,8 +66,8 @@
       
       $this->kota->provinsi_id = $idProvinsi;
       $rsKota = $this->kota->getAllData()->result();
+      
       $listKota = array();
-      $listKota[""] = "Pilih Kabupaten / Kota";
       foreach ($rsKota as $value) {
         $listKota[$value->id] = $value->name;
       }

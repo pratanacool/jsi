@@ -139,7 +139,9 @@
                   echo "<td style='text-align:right'>".$row['jumPemilih']."</td>";
                   echo "<td style='text-align:right'>".$row['kontak']."</td>";
                   echo "<td style='text-align:center'>";
-                    echo "<a class='btn-floating waves-effect waves-light tooltipped modal-trigger blue' data-tooltip='Interview pemilih' onclick='edit($id)' href='#modalInterview'><i class='mdi-action-assignment'></i></a>";
+                    echo "<a class='btn-floating waves-effect waves-light tooltipped modal-trigger blue' data-tooltip='Interview pemilih' onclick='view($id)' href='#modalInterview'><i class='mdi-action-assignment'></i></a>";
+
+                    echo "<a class='btn-floating waves-effect waves-light tooltipped modal-trigger orange' data-tooltip='Interview pemilih' onclick='edit($id)' href='#modalEditInterview'><i class='mdi-action-assignment-late'></i></a>";
                   echo "</td>";
                 echo "</tr>";
               }
@@ -169,14 +171,33 @@
 
 <!-- /modal form -->
 
+<!-- modal form -->
+
+    <div id="modalEditInterview" class="modal modal-fixed-footer">
+      <form action="<?php echo base_url();?>pemilih/editInterview" method="POST" id="formKu" enctype="multipart/form-data">
+        <div class="modal-content" id="editKonten">
+          
+
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn cyan waves-effect waves-light right" type="submit" name="action">Simpan <i class="mdi-content-send right"></i> </button>
+          <a href="#" class="btn red waves-effect waves-light right modal-action modal-close">Batal <i class="mdi-content-clear right"></i></a>
+          <a class="btn blue waves-effect waves-light right" id="tambah">Tambah Pertanyaan<i class="mdi-editor-border-color right"></i></a>
+        </div>
+        </form>
+    </div>
+
+<!-- /modal form -->
+
 <script type="text/javascript">
 
   var pilihan ={
-                  "A":"Partai saya dan caleg saya",
-                  "B":"Partai saya tapi caleg lain (dari partai lain)",
-                  "C":"Partai saya tetapi tidak tau calegnya siapa",
-                  "D":"Partai lain dan caleg lain",
-                  "E":"Tidak tau partai mana tetapi calegnya caleg saya"
+                  "A":"A. Partai saya, Caleg saya",
+                  "B":"B. Partai saya, Belum ada caleg",
+                  "C":"C. Tidak tahu / Tidak jawab",
+                  "D":"D. Partai saya, Caleg lain",
+                  "E":"E. Partai lain, Caleg lain"
                 };
   setKota();
   setKecamatan();
@@ -223,13 +244,34 @@
     function(data, response) {
       try{
           var hasil = jQuery.parseJSON(data);
-          var options ='';
+          var options =[];
+
+          $.each(hasil, function(key, value) {
+              options.push(
+                {v:value, k: key}
+              );
+          });
+
+          options.sort(function(a,b){
+             if(a.v > b.v){ return 1}
+              if(a.v < b.v){ return -1}
+                return 0;
+          });
+
           $("#kotakabupaten").empty();
-          $.each(hasil, function(i, item){
+          var $newOptawal = $("<option>").attr("value","").text("Pilih Kabupaten / Kota");
+          $("#kotakabupaten").append($newOptawal);
+          $.each(options, function(jk, itemk){
+            
+            i = itemk.k;
+            item = itemk.v
+
             if (i == kotakabupaten) {  selected = true; } else {  selected = false; }
             var $newOpt = $("<option>").attr("value",i).text(item).prop('selected', selected);
             $("#kotakabupaten").append($newOpt);
+            
           });
+
           $("#kotakabupaten").material_select();
       }
       catch(ex){
@@ -237,8 +279,6 @@
         $("#kotakabupaten").empty();
         $("#kotakabupaten").append("<option value=''>Pilih Kota / Kabupaten</option>");
       }
-
-      
 
     });
   }  
@@ -248,15 +288,34 @@
     function(data, response) {
       try{
           var hasil = jQuery.parseJSON(data);
-          var options ='';
-          $("#kecamatan").empty();
-          $.each(hasil, function(i, item){
-            if (i == kecamatan) {  selected = true; } else {  selected = false; }
+          var options =[];
 
+          $.each(hasil, function(key, value) {
+              options.push(
+                {v:value, k: key}
+              );
+          });
+
+          options.sort(function(a,b){
+             if(a.v > b.v){ return 1}
+              if(a.v < b.v){ return -1}
+                return 0;
+          });
+
+          $("#kecamatan").empty();          
+          var $newOptawal = $("<option>").attr("value","").text("Pilih Kecamatan");
+          $("#kecamatan").append($newOptawal);
+          $.each(options, function(jk, itemk){
+            
+            i = itemk.k;
+            item = itemk.v
+
+            if (i == kecamatan) {  selected = true; } else {  selected = false; }
             var $newOpt = $("<option>").attr("value",i).text(item).prop('selected', selected);
             $("#kecamatan").append($newOpt);
-
+            
           });
+
           $("#kecamatan").material_select();    
       }
       catch(ex){
@@ -273,14 +332,33 @@
     function(data, response) {
       try{
           var hasil = jQuery.parseJSON(data);
-          var options ='';
-          $("#kelurahan").empty();
-          $.each(hasil, function(i, item){
-            if (i == kelurahan) {  selected = true; } else {  selected = false; }
+          var options =[];
 
+          $.each(hasil, function(key, value) {
+              options.push(
+                {v:value, k: key}
+              );
+          });
+
+          options.sort(function(a,b){
+             if(a.v > b.v){ return 1}
+              if(a.v < b.v){ return -1}
+                return 0;
+          });
+
+          $("#kelurahan").empty();
+
+          var $newOptawal = $("<option>").attr("value","").text("Pilih Kelurahan");
+          $("#kelurahan").append($newOptawal);
+          $.each(options, function(jk, itemk){
+            
+            i = itemk.k;
+            item = itemk.v
+
+            if (i == kelurahan) {  selected = true; } else {  selected = false; }
             var $newOpt = $("<option>").attr("value",i).text(item).prop('selected', selected);
             $("#kelurahan").append($newOpt);
-
+            
           });
           $("#kelurahan").material_select();    
       }
@@ -293,7 +371,7 @@
     });
   }
 
-  var a=3;
+  var a=0;
   window.setTimeout(function() {
       $("#card-alert").fadeTo(500, 0).slideUp(500, function(){
           $(this).remove(); 
@@ -310,7 +388,7 @@
         });
   });
 
-  function edit(id) {
+  function view(id) {
     var nik = $("#nik"+id).text();
     var nama = $("#nama"+id).text();
     $.post('<?php echo base_url();?>pemilih/getInterview', {idPemilih:id},
@@ -333,8 +411,6 @@
 
             interview +="<div class='input-field col m6'>"+jawabanPemilih+"</div>";
             interview +="</div>";
-
-            console.log(item)
           });
           $("#konten").append(interview);
       }
@@ -342,6 +418,78 @@
         console.log("error "+ex);
       }
     });
+  }  
+
+  function edit(id) {
+    $("#editKonten").empty();
+    var nik = $("#nik"+id).text();
+    var nama = $("#nama"+id).text();
+    var idCaleg = "";
+    var idPemilih = "";
+    var idMaster = "";
+    var select = "";
+    $.post('<?php echo base_url();?>pemilih/getInterview', {idPemilih:id},
+      function(data, response) {
+      try{
+          var interview = "<h4 class='header2'>Hasil Konsolidasi "+nama+" ("+nik+")</h4>";
+          $("#konten").empty();
+          var hasil = jQuery.parseJSON(data);
+          j=0;
+          $.each(hasil, function(i, item){
+            idCaleg = item.caleg_id;
+            idPemilih = item.pemilih_id;
+            idMaster = item.master_id;
+
+            j++;
+            jawabanPemilih = item.jawaban;
+            interview +="<div class='row' id='pertanyaan"+j+"'>";
+            interview +="<div class='input-field col m5'><strong><input name='pertanyaan[]' type='text' value='"+item.pertanyaan+"'> </strong></div>";
+            
+            if(j==1){
+
+            interview += "<div class='input-field col m6'> <select name='jawaban[]' id='pilihan' >";
+              $.each(pilihan, function(i, p) {
+                  if(i == item.jawaban){ opt = "selected='selected'"}else{opt = false}
+                  interview += "<option value='"+i+"' "+opt+" >"+p+"</option>";
+              });
+            interview += "</select> </div>";
+
+            }
+            else{
+              interview +="<div class='input-field col m6'><input name='jawaban[]' type='text' value='"+item.jawaban+"'></div>";  
+            }
+
+            interview += "<a class='btn-floating waves-effect waves-light tooltipped red' data-tooltip='Hapus pertanyaan' onclick='hapus("+j+")' style='margin-top:15px'><i class='mdi-action-delete'></i></a>"; 
+            interview +="</div>";
+          });
+          interview +="<input name='idCaleg' type='hidden' value='"+idCaleg+"'>";
+          interview +="<input name='idPemilih' type='hidden' value='"+idPemilih+"'>";
+          interview +="<input name='idMaster' type='hidden' value='"+idMaster+"'>";
+          a=j+1;
+          console.log(a);
+          $("#editKonten").append(interview);
+          $("#pilihan").material_select();  
+      }
+      catch(ex){
+        console.log("error "+ex);
+      }
+    });
   }
+
+  $("#tambah").click(function(){
+    var div = $(document.createElement('div')).attr("id",'pertanyaan'+a).attr("class","row");
+
+    var pertanyaan = "<div class='input-field col s12 m5'>  <input name='pertanyaan[]' type='text'> <label for='pertanyaan' >Pertanyaan</label> </div>";
+    var jawaban = "<div class='input-field col s12 m6'> <input name='jawaban[]' type='text'>  <label for='jawaban' >Jawaban</label> </div>";
+
+    var tombol = "<a class='btn-floating waves-effect waves-light tooltipped red' data-tooltip='Hapus pertanyaan' onclick='hapus("+a+")' style='margin-top:15px'><i class='mdi-action-delete'></i></a>";      
+
+    div.after().html(pertanyaan + jawaban + tombol);
+    div.appendTo('#editKonten'); a++;
+  }); 
+
+  function hapus(id){
+    $("#pertanyaan"+id).remove();
+  } 
 
 </script>

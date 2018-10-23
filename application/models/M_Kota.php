@@ -5,7 +5,7 @@
     public $provinsi_id;    
     public $name;
 
-  	function __construct()
+    function __construct()
     {
       parent::__construct();
     }
@@ -58,9 +58,9 @@
                 $this->db->where(array("provinsi_id"=>$key));
                 break;
         }
-    	$this->db->select('*');
-    	$result = $this->db->get('kota');
-    	return $result;
+        $this->db->select('*');
+        $result = $this->db->get('kota');
+        return $result;
     }
 
     public function getData(){
@@ -73,8 +73,13 @@
       }
 
       $data = $this->db->get("kota")->row();
-      $this->name = $data->name;
-      return true;
+      if($data){
+        $this->name = $data->name;
+        return true;
+      } 
+      else {
+          return false;
+      }
     }
 
 

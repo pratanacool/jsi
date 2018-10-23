@@ -4,7 +4,7 @@
     public $id;
     public $kota_id;
     public $name;
-  	function __construct()
+    function __construct()
     {
       parent::__construct();
     }
@@ -60,9 +60,10 @@
                 $this->db->where(array("left(id,4)"=>$key));
                 break;
         }
-    	$this->db->select('count(*) as total');
-    	$result = $this->db->get('kecamatan');
-    	return $result->row()->total;
+      $this->db->select('count(*) as total');
+      $this->db->order_by('name','asc');
+      $result = $this->db->get('kecamatan');
+      return $result->row()->total;
     }
 
     public function getData(){
@@ -75,6 +76,7 @@
       }
 
       $data = $this->db->get("kecamatan")->row();
+      $this->db->order_by('name','asc');
       if($data){
           $this->name = $data->name;
           return true;

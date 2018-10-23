@@ -59,7 +59,6 @@
       $this->kelurahan->kecamatan_id = $idKelurahan;
       $rsKelurahan = $this->kelurahan->getAllData()->result();
       $listKelurahan = array();
-      $listKelurahan[""] = "Pilih Kelurahan";
       foreach ($rsKelurahan as $value) {
         $listKelurahan[$value->id] = $value->name;
       }

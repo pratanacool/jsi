@@ -265,13 +265,34 @@
     function(data, response) {
       try{
           var hasil = jQuery.parseJSON(data);
-          var options ='';
+          var options =[];
+
+          $.each(hasil, function(key, value) {
+              options.push(
+                {v:value, k: key}
+              );
+          });
+
+          options.sort(function(a,b){
+             if(a.v > b.v){ return 1}
+              if(a.v < b.v){ return -1}
+                return 0;
+          });
+
           $("#kotakabupaten").empty();
-          $.each(hasil, function(i, item){
+          var $newOptawal = $("<option>").attr("value","").text("Pilih Kabupaten / Kota");
+          $("#kotakabupaten").append($newOptawal);
+          $.each(options, function(jk, itemk){
+            
+            i = itemk.k;
+            item = itemk.v
+
             if (i == kotakabupaten) {  selected = true; } else {  selected = false; }
             var $newOpt = $("<option>").attr("value",i).text(item).prop('selected', selected);
             $("#kotakabupaten").append($newOpt);
+            
           });
+
           $("#kotakabupaten").material_select();
       }
       catch(ex){
@@ -279,8 +300,6 @@
         $("#kotakabupaten").empty();
         $("#kotakabupaten").append("<option value=''>Pilih Kota / Kabupaten</option>");
       }
-
-      
 
     });
   }  
@@ -290,15 +309,34 @@
     function(data, response) {
       try{
           var hasil = jQuery.parseJSON(data);
-          var options ='';
-          $("#kecamatan").empty();
-          $.each(hasil, function(i, item){
-            if (i == kecamatan) {  selected = true; } else {  selected = false; }
+          var options =[];
 
+          $.each(hasil, function(key, value) {
+              options.push(
+                {v:value, k: key}
+              );
+          });
+
+          options.sort(function(a,b){
+             if(a.v > b.v){ return 1}
+              if(a.v < b.v){ return -1}
+                return 0;
+          });
+
+          $("#kecamatan").empty();          
+          var $newOptawal = $("<option>").attr("value","").text("Pilih Kecamatan");
+          $("#kecamatan").append($newOptawal);
+          $.each(options, function(jk, itemk){
+            
+            i = itemk.k;
+            item = itemk.v
+
+            if (i == kecamatan) {  selected = true; } else {  selected = false; }
             var $newOpt = $("<option>").attr("value",i).text(item).prop('selected', selected);
             $("#kecamatan").append($newOpt);
-
+            
           });
+
           $("#kecamatan").material_select();    
       }
       catch(ex){
@@ -315,14 +353,33 @@
     function(data, response) {
       try{
           var hasil = jQuery.parseJSON(data);
-          var options ='';
-          $("#kelurahan").empty();
-          $.each(hasil, function(i, item){
-            if (i == kelurahan) {  selected = true; } else {  selected = false; }
+          var options =[];
 
+          $.each(hasil, function(key, value) {
+              options.push(
+                {v:value, k: key}
+              );
+          });
+
+          options.sort(function(a,b){
+             if(a.v > b.v){ return 1}
+              if(a.v < b.v){ return -1}
+                return 0;
+          });
+
+          $("#kelurahan").empty();
+
+          var $newOptawal = $("<option>").attr("value","").text("Pilih Kelurahan");
+          $("#kelurahan").append($newOptawal);
+          $.each(options, function(jk, itemk){
+            
+            i = itemk.k;
+            item = itemk.v
+
+            if (i == kelurahan) {  selected = true; } else {  selected = false; }
             var $newOpt = $("<option>").attr("value",i).text(item).prop('selected', selected);
             $("#kelurahan").append($newOpt);
-
+            
           });
           $("#kelurahan").material_select();    
       }
@@ -334,7 +391,6 @@
       
     });
   }
-
   var a=4;
   window.setTimeout(function() {
       $("#card-alert").fadeTo(500, 0).slideUp(500, function(){

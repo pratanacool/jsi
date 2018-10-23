@@ -5,12 +5,12 @@
       parent ::__construct();
       $this->load->library('pagination');
       $this->load->model('M_Pemilih','pemilih',true);
-      $this->pilihan = array("",
-                  "A"=>"Partai saya dan caleg saya",
-                  "B"=>"Partai saya tapi caleg lain (dari partai lain)",
-                  "C"=>"Partai saya tetapi tidak tau calegnya siapa",
-                  "D"=>"Partai lain dan caleg lain",
-                  "E"=>"Tidak tau partai mana tetapi calegnya caleg saya"
+      $this->pilihan = array(""=>"Semua Kategori",
+                  "A"=>"A. Partai saya, Caleg saya",
+                  "B"=>"B. Partai saya, Belum ada caleg",
+                  "C"=>"C. Tidak tahu / Tidak jawab",
+                  "D"=>"D. Partai saya, Caleg lain",
+                  "E"=>"E. Partai lain, Caleg lain"
                 );
     }
 
@@ -159,6 +159,7 @@
       $this->load->model("M_Provinsi");
       $this->load->model('M_Kecamatan', 'kecamatan', true);
 
+      $dataPemilih = array();
       $tPemilih = 0;
       $listLimit = array(10=>10, 25=>25, 50=>50, 75=>75, 100=>100, 200=>200, 250=>250);       
       $action = $this->input->post('action');
@@ -218,6 +219,7 @@
         $dataPemilih[$i]['tps'] = $dPemilih[$i]->tps;
         $dataPemilih[$i]['memilih'] = $dPemilih[$i]->memilih;
 
+        $this->kecamatan->name = false;
         $this->kecamatan->id = $dPemilih[$i]->kecamatan;
         $this->kecamatan->getData();
 
@@ -249,7 +251,7 @@
 
       $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
 
-      $listLimit = array(1=>1, 10=>10, 25=>25, 50=>50, 75=>75, 100=>100, 200=>200, 250=>250);       
+      $listLimit = array(10=>10, 25=>25, 50=>50, 75=>75, 100=>100, 200=>200, 250=>250);       
       
       $action = $this->input->post('action');
       
@@ -319,10 +321,15 @@
           $dataPemilih[$i]['nama_kelurahan'] = $dPemilih[$i]->nama_kelurahan;
           $dataPemilih[$i]['tps'] = $dPemilih[$i]->tps;
           
+          $this->kecamatan->provinsi = false;
           $this->provinsi->id = $dPemilih[$i]->provinsi;
           $this->provinsi->getData();
+          
+          $this->kota->name = false;
           $this->kota->id = $dPemilih[$i]->kota;
           $this->kota->getData();
+
+          $this->kecamatan->name = false;
           $this->kecamatan->id = $dPemilih[$i]->kecamatan;
           $this->kecamatan->getData();
 
@@ -355,36 +362,37 @@
       $data["paginator"] = $this->pagination->create_links();
       $data["totalData"] = $tPemilih;
 
-
       $this->pemilih->provinsi = false;
       $this->pemilih->kota = false;
       $this->pemilih->kecamatan = false;
       $this->pemilih->kelurahan = false;
-      $this->pemilih->memilih = idCaleg;
-      $this->pemilih->pilihan = false;
-      $tKonsolidasi = $this->pemilih->getTotalData();
-      $data["totalKonsolidasi"] = $tKonsolidasi; 
-
-      $this->pemilih->pilihan = "A";
-      $tA = $this->pemilih->getTotalDataPemilih();
+      if($tPemilih > 0){
+        $this->pemilih->memilih = idCaleg;
+        $this->pemilih->pilihan = false;
+        $tKonsolidasi = $this->pemilih->getTotalData();
+        
+        $this->pemilih->pilihan = "A";
+        $tA = $this->pemilih->getTotalDataPemilih();
+        
+        $this->pemilih->pilihan = "B";
+        $tB = $this->pemilih->getTotalDataPemilih();
+        
+        $this->pemilih->pilihan = "C";
+        $tC = $this->pemilih->getTotalDataPemilih();        
+        
+        $this->pemilih->pilihan = "D";
+        $tD = $this->pemilih->getTotalDataPemilih();
+                
+        $this->pemilih->pilihan = "E";
+        $tE = $this->pemilih->getTotalDataPemilih();
+        
+      }
       $data["totalA"] = $tA; 
-
-      $this->pemilih->pilihan = "B";
-      $tB = $this->pemilih->getTotalDataPemilih();
       $data["totalB"] = $tB;      
-      
-      $this->pemilih->pilihan = "C";
-      $tC = $this->pemilih->getTotalDataPemilih();
       $data["totalC"] = $tC;      
-      
-      $this->pemilih->pilihan = "D";
-      $tD = $this->pemilih->getTotalDataPemilih();
       $data["totalD"] = $tD;      
-      
-      $this->pemilih->pilihan = "E";
-      $tE = $this->pemilih->getTotalDataPemilih();
       $data["totalE"] = $tE;      
-      
+      $data["totalKonsolidasi"] = $tKonsolidasi; 
       $this->render_page('pemilih/konsolidasi', $data);
     }
 
@@ -396,5 +404,50 @@
 
       echo json_encode($data);
     }
+
+    public function editInterview(){
+      $this->load->model("M_Interview_master", "mInterview", true);
+      $this->load->model("M_Interview_detail", "dInterview", true);
+      $this->load->model("M_Pemilih", "pemilih", true);
+
+      $idMaster = $this->input->post('idMaster');
+
+      $this->mInterview->id = $idMaster;
+      $this->dInterview->m_interview_id = $idMaster;
+
+      $this->mInterview->hapus();
+      $this->dInterview->hapus();
+
+      $idPemilih = $this->input->post('idPemilih');
+      $idCaleg = $this->input->post('idCaleg');
+      $pertanyaan = $this->input->post('pertanyaan');
+      $jawaban = $this->input->post('jawaban');
+
+
+      $this->mInterview->caleg_id = $idCaleg;
+      $this->mInterview->pemilih_id = $idPemilih;
+      $this->mInterview->user_id = "1";
+      $this->mInterview->memilih = "0";
+
+      $this->pemilih->memilih = idCaleg;
+      $this->pemilih->id = $idPemilih;
+      $this->pemilih->save();
+      $this->mInterview->memilih = $jawaban[0];
+      $this->mInterview->banyak_pemilih = $jawaban[1];
+      $this->mInterview->kontak = $jawaban[2];
+
+      $this->mInterview->simpan();
+      $idMaster = $this->mInterview->id;
+
+      for ($i = 0; $i < count($pertanyaan) ; $i++) {          
+          if($pertanyaan[$i]!="" && $jawaban[$i]!=""){
+            $this->dInterview->m_interview_id = $idMaster;
+            $this->dInterview->pertanyaan = $pertanyaan[$i];
+            $this->dInterview->jawaban = $jawaban[$i];
+            $this->dInterview->simpan();          
+          }
+      }
+      redirect(base_url()."pemilih/konsolidasi/");
+    }  
   }
 ?>

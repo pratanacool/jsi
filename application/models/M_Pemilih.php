@@ -47,7 +47,7 @@
         $this->db->where("caleg_id", $this->memilih);
       }      
 
-      if( $this->pilihan != '0' ){
+      if( $this->pilihan != '' ){
         $this->db->where("m_interview.memilih", $this->pilihan);
       }
 
@@ -95,7 +95,7 @@
         $this->db->where("caleg_id", $this->memilih);
       }
 
-      if( $this->pilihan != '0' ){
+      if( $this->pilihan != '' ){
         $this->db->where("m_interview.memilih", $this->pilihan);
       }
 
@@ -250,7 +250,6 @@
     }
 
     public function getTotalDataPemilih(){
-      
       if( $this->provinsi != null ){
         $this->db->where(array("provinsi" => $this->provinsi));
       } 
@@ -275,7 +274,7 @@
         $this->db->where("caleg_id", $this->memilih);
       }
 
-      if( $this->pilihan != '0' ){
+      if( $this->pilihan != null ){
         $this->db->where("m_interview.memilih", $this->pilihan);
       }
 

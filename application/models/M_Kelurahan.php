@@ -78,6 +78,7 @@
       }
 
       $data = $this->db->get("kelurahan")->row();
+      $this->db->order_by('name','asc');
       $this->name = $data->name;
       return true;
     }
