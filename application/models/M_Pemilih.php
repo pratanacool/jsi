@@ -40,7 +40,7 @@
       }
 
       if( $search != null ){
-        $this->db->where("nama like '%".$search."%' or nik like '%".$search."%'");
+        $this->db->where("(nama like '%".$search."%' or nik like '%".$search."%')");
       }
 
       if( $this->memilih != null ){
@@ -51,9 +51,19 @@
         $this->db->where("m_interview.memilih", $this->pilihan);
       }
 
-      $this->db->select(
-        "pemilih.*, kelurahan.name as nama_kelurahan, m_interview.memilih, m_interview.banyak_pemilih, m_interview.kontak"
-      );
+      $this->db->select("pemilih.id,
+        pemilih.nik,
+        pemilih.nama,
+        pemilih.tempat_lahir,
+        pemilih.provinsi,
+        pemilih.kota,
+        pemilih.kecamatan,
+        pemilih.kelurahan,
+        pemilih.tps, 
+        kelurahan.name as nama_kelurahan, 
+        m_interview.memilih, 
+        m_interview.banyak_pemilih, 
+        m_interview.kontak");
       $this->db->from("pemilih");
       $this->db->join("m_interview","m_interview.pemilih_id = pemilih.id", "left");
       $this->db->join("kelurahan","kelurahan.id = pemilih.kelurahan","left");
@@ -88,7 +98,7 @@
       }
 
       if( $search != null ){
-        $this->db->where("nama like '%".$search."%' or nik like '%".$search."%'");
+        $this->db->where("(nama like '%".$search."%' or nik like '%".$search."%')");
       }
 
       if( $this->memilih != null ){

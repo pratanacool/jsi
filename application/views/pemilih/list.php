@@ -119,7 +119,7 @@
                   echo "<td>TPS ".$row['tps']."</td>";
                   echo "<td>";
                     echo "<a class='btn-floating waves-effect waves-light tooltipped modal-trigger orange' data-tooltip='Edit data pemilih' href='#modalEdit' onclick='edit({$id})'><i class='mdi-editor-mode-edit' alt='edit'></i></a>"; 
-                      if($row['memilih'] == 0){
+                      if($row['memilih'] == null){
                         echo " | <a class='btn-floating waves-effect waves-light tooltipped modal-trigger blue' data-tooltip='Interview pemilih' onclick='edit({$id})' href='#modalInterview'><i class='mdi-action-assignment'></i></a>";
                       }
                   echo "</td>";

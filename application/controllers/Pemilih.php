@@ -362,10 +362,10 @@
       $data["paginator"] = $this->pagination->create_links();
       $data["totalData"] = $tPemilih;
 
-      $this->pemilih->provinsi = false;
-      $this->pemilih->kota = false;
-      $this->pemilih->kecamatan = false;
-      $this->pemilih->kelurahan = false;
+      // $this->pemilih->provinsi = false;
+      // $this->pemilih->kota = false;
+      // $this->pemilih->kecamatan = false;
+      // $this->pemilih->kelurahan = false;
       if($tPemilih > 0){
         $this->pemilih->memilih = idCaleg;
         $this->pemilih->pilihan = false;
