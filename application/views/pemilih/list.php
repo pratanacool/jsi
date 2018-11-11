@@ -193,6 +193,17 @@
                 </div>
           </div>
 
+
+          <div class="row" id="pertanyaan4">
+            <div class='input-field col s12 m5'>  <input name='pertanyaan[]' type='text' value="Tipe Pemilih" readonly="true"> <label for='pertanyaan' >Pertanyaan</label> </div>
+            <div class='input-field col s12 m6'>
+                    <?php
+                      echo form_dropdown('jawaban[]', $listTipePemilih,'id="pemilih"');
+                    ?>
+                </div>
+          </div>
+
+
           <div class="row" id="pertanyaan2">
             <div class='input-field col s12 m5'>  <input name='pertanyaan[]' type='text' value="Jumlah pemilih dalam satu rumah" readonly="true"> <label for='pertanyaan' >Pertanyaan</label> </div>
             <div class='input-field col s12 m6'>
@@ -391,7 +402,7 @@
       
     });
   }
-  var a=4;
+  var a=5;
   window.setTimeout(function() {
       $("#card-alert").fadeTo(500, 0).slideUp(500, function(){
           $(this).remove(); 

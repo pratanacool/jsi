@@ -61,14 +61,30 @@
             </div>
             
 
-            <div class="input-field col s4">
+            <div class="input-field col s3">
               <?php
                 echo form_dropdown('pilihan', $listPilihan, $pilihan);
               ?>
               <label for="icon_prefix">Kategori</label>
+            </div>             
+
+
+            <div class="input-field col s2">
+              <?php
+                echo form_dropdown('pemilih', $listTipePemilih, $tipePemilih);
+              ?>
+              <label for="icon_prefix">Tipe Pemilih</label>
             </div>  
 
-            <div class="input-field col s1  offset-s5">
+            <div class="input-field col s2">
+              <?php
+                echo form_dropdown('kontak', $listKontak, $kontak);
+              ?>
+              <label for="icon_prefix">Kontak Pemilih</label>
+            </div>  
+
+
+            <div class="input-field col s1  offset-s4">
               <?php
                 echo form_dropdown('limit', $listLimit, $limit);
               ?>
@@ -119,6 +135,7 @@
                 <th>Pilihan pilleg</th>
                 <th>Jumlah pemilih</th>
                 <th>Nomor Kontak</th>
+                <th>Tipe Pemilih</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -138,6 +155,7 @@
                   echo "<td style='text-align:center'>".$row['pilihan']."</td>";
                   echo "<td style='text-align:right'>".$row['jumPemilih']."</td>";
                   echo "<td style='text-align:right'>".$row['kontak']."</td>";
+                  echo "<td style='text-align:right'>".$row['tipe_pemilih']."</td>";
                   echo "<td style='text-align:center'>";
                     echo "<a class='btn-floating waves-effect waves-light tooltipped modal-trigger blue' data-tooltip='Interview pemilih' onclick='view($id)' href='#modalInterview'><i class='mdi-action-assignment'></i></a>";
 
@@ -199,6 +217,13 @@
                   "D":"D. Partai saya, Caleg lain",
                   "E":"E. Partai lain, Caleg lain"
                 };
+  
+  var tipePemilih={
+                    "1":"Relawan",
+                    "2":"Kerabat / Keluarga",
+                    "3":"Pemilih Biasa"
+                  };
+
   setKota();
   setKecamatan();
   setKelurahan();
@@ -409,6 +434,10 @@
              jawabanPemilih = pilihan[item.jawaban]; 
             }
 
+            else if(j == 2){
+              jawabanPemilih = tipePemilih[item.jawaban]; 
+            }
+
             interview +="<div class='input-field col m6'>"+jawabanPemilih+"</div>";
             interview +="</div>";
           });
@@ -455,20 +484,33 @@
             interview += "</select> </div>";
 
             }
+
+            else if(j == 2){
+              interview += "<div class='input-field col m6'> <select name='jawaban[]' id='pemilih' >";
+                $.each(tipePemilih, function(i2, p2) {
+                    if(i2 == item.jawaban){ opt2 = "selected='selected'"}else{opt2 = false}
+                    interview += "<option value='"+i2+"' "+opt2+" >"+p2+"</option>";
+                });
+              interview += "</select> </div>";
+            }
+
             else{
               interview +="<div class='input-field col m6'><input name='jawaban[]' type='text' value='"+item.jawaban+"'></div>";  
             }
 
             interview += "<a class='btn-floating waves-effect waves-light tooltipped red' data-tooltip='Hapus pertanyaan' onclick='hapus("+j+")' style='margin-top:15px'><i class='mdi-action-delete'></i></a>"; 
             interview +="</div>";
+
           });
+
           interview +="<input name='idCaleg' type='hidden' value='"+idCaleg+"'>";
           interview +="<input name='idPemilih' type='hidden' value='"+idPemilih+"'>";
           interview +="<input name='idMaster' type='hidden' value='"+idMaster+"'>";
           a=j+1;
-          console.log(a);
+
           $("#editKonten").append(interview);
           $("#pilihan").material_select();  
+          $("#pemilih").material_select();  
       }
       catch(ex){
         console.log("error "+ex);

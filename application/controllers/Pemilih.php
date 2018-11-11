@@ -12,6 +12,15 @@
                   "D"=>"D. Partai saya, Caleg lain",
                   "E"=>"E. Partai lain, Caleg lain"
                 );
+      $this->tipePemilih = array( ""=>"Semua Tipe Pemilih",
+                                  "1"=>"Relawan",
+                                  "2"=>"Kerabat / Keluarga",
+                                  "3"=>"Pemilih Biasa"
+                                );
+
+      $this->listKontak = array( ""=>"Semua",
+                                 "0"=>"Tidak Memberi Kontak",
+                                 "1"=>"Memberi Kontak");
     }
 
     public function index(){
@@ -129,15 +138,15 @@
       $this->mInterview->caleg_id = $idCaleg;
       $this->mInterview->pemilih_id = $idPemilih;
       $this->mInterview->user_id = "1";
-      $this->mInterview->memilih = "0";
 
       // if($jawaban[0] == "Partai ".partai." dan caleg ".namaCaleg or $jawaban[0] == "Tidak tau partai mana tetapi calegnya ".namaCaleg){
       $this->pemilih->memilih = idCaleg;
       $this->pemilih->id = $idPemilih;
       $this->pemilih->save();
       $this->mInterview->memilih = $jawaban[0];
-      $this->mInterview->banyak_pemilih = $jawaban[1];
-      $this->mInterview->kontak = $jawaban[2];
+      $this->mInterview->tipe_pemilih = $jawaban[1];
+      $this->mInterview->banyak_pemilih = $jawaban[2];
+      $this->mInterview->kontak = $jawaban[3];
       // }
 
 
@@ -236,6 +245,7 @@
       
       $this->pagination->initialize($config);
       $data['listPilihan'] = $this->pilihan;
+      $data['listTipePemilih'] = $this->tipePemilih;
       $data['listLimit'] = $listLimit;
       $data['listProvinsi'] = $listProvinsi;
       $data["paginator"] = $this->pagination->create_links();
@@ -262,6 +272,8 @@
         $filterData['kelurahankons'] = $this->input->post('kelurahan');
         $filterData['searchkons'] = $this->input->post('search');
         $filterData['pilihans'] = $this->input->post('pilihan');
+        $filterData['pemilihs'] = $this->input->post('pemilih');
+        $filterData['kontaks'] = $this->input->post('kontak');
         $filterData['limitkons'] = $this->input->post('limit');
         $this->session->set_userdata($filterData);
       }
@@ -272,6 +284,8 @@
       $kelurahan = $this->session->userdata('kelurahankons');
       $search = $this->session->userdata('searchkons');
       $pilihan = $this->session->userdata('pilihans');
+      $tipePemilih = $this->session->userdata('pemilihs');
+      $kontak = $this->session->userdata('kontaks');
       $limit = $this->session->userdata('limitkons');
       
       $dataPemilih = array();
@@ -304,6 +318,8 @@
       $this->pemilih->kelurahan = $kelurahan;
       $this->pemilih->memilih = idCaleg;
       $this->pemilih->pilihan = $pilihan;
+      $this->pemilih->tipePemilih = $tipePemilih;
+      $this->pemilih->kontak = $kontak;
 
       if ($provinsi != "") {
         $tPemilih = $this->pemilih->getTotalData($search);
@@ -316,10 +332,11 @@
           $dataPemilih[$i]['nik'] = $dPemilih[$i]->nik;
           $dataPemilih[$i]['nama'] = $dPemilih[$i]->nama;
           $dataPemilih[$i]['tempat_lahir'] = $dPemilih[$i]->tempat_lahir;
-          $dataPemilih[$i]['tanggal_lahir'] = $dPemilih[$i]->tanggal_lahir;
-          $dataPemilih[$i]['gender'] = $dPemilih[$i]->gender;
+          // $dataPemilih[$i]['tanggal_lahir'] = $dPemilih[$i]->tanggal_lahir;
+          // $dataPemilih[$i]['gender'] = $dPemilih[$i]->gender;
           $dataPemilih[$i]['nama_kelurahan'] = $dPemilih[$i]->nama_kelurahan;
           $dataPemilih[$i]['tps'] = $dPemilih[$i]->tps;
+          $dataPemilih[$i]['tipe_pemilih'] = $dPemilih[$i]->tipe_pemilih;
           
           $this->kecamatan->provinsi = false;
           $this->provinsi->id = $dPemilih[$i]->provinsi;
@@ -355,8 +372,12 @@
       }
       
       $this->pagination->initialize($config);
+      $data['kontak'] = $kontak;
       $data['pilihan'] = $pilihan;
+      $data['tipePemilih'] = $tipePemilih;
+      $data['listKontak'] = $this->listKontak;
       $data['listPilihan'] = $this->pilihan;
+      $data['listTipePemilih'] = $this->tipePemilih;
       $data['listLimit'] = $listLimit;
       $data['listProvinsi'] = $listProvinsi;
       $data["paginator"] = $this->pagination->create_links();

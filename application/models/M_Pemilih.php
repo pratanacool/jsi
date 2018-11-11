@@ -13,6 +13,8 @@
     public $tps;
     public $memilih;
     public $pilihan;
+    public $tipePemilih;
+    public $kontak;
 
     function __construct(){
       parent::__construct();
@@ -51,6 +53,18 @@
         $this->db->where("m_interview.memilih", $this->pilihan);
       }
 
+      if( $this->tipePemilih != '' ){
+        $this->db->where("m_interview.tipe_pemilih", $this->tipePemilih);
+      }
+
+      if($this->kontak == "0"){
+       $this->db->where("m_interview.kontak = '' "); 
+      }
+
+      elseif($this->kontak == "1"){
+       $this->db->where("m_interview.kontak != '' "); 
+      }
+
       $this->db->select("pemilih.id,
         pemilih.nik,
         pemilih.nama,
@@ -63,7 +77,8 @@
         kelurahan.name as nama_kelurahan, 
         m_interview.memilih, 
         m_interview.banyak_pemilih, 
-        m_interview.kontak");
+        m_interview.kontak,
+        m_interview.tipe_pemilih");
       $this->db->from("pemilih");
       $this->db->join("m_interview","m_interview.pemilih_id = pemilih.id", "left");
       $this->db->join("kelurahan","kelurahan.id = pemilih.kelurahan","left");
@@ -107,6 +122,10 @@
 
       if( $this->pilihan != '' ){
         $this->db->where("m_interview.memilih", $this->pilihan);
+      }
+
+      if( $this->tipePemilih != '' ){
+        $this->db->where("m_interview.tipe_pemilih", $this->tipePemilih);
       }
 
       $this->db->select(

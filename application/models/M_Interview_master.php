@@ -9,6 +9,7 @@
     public $memilih;
     public $banyak_pemilih;
     public $kontak;
+    public $tipe_pemilih;
 
   	function __construct()
     {
@@ -22,6 +23,7 @@
       $data['memilih'] = $this->memilih;
       $data['banyak_pemilih'] = $this->banyak_pemilih;
       $data['kontak'] = $this->kontak;
+      $data['tipe_pemilih'] = $this->tipe_pemilih;
 
       // if ($this->id != "") {
       //   $where['id'] = $this->id;
