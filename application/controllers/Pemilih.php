@@ -13,9 +13,12 @@
                   "E"=>"E. Partai lain, Caleg lain"
                 );
       $this->tipePemilih = array( ""=>"Semua Tipe Pemilih",
-                                  "1"=>"Relawan",
-                                  "2"=>"Kerabat / Keluarga",
-                                  "3"=>"Pemilih Biasa"
+                                  "1"=>"1. Tim Profesional",
+                                  "2"=>"2. Kerabat / Keluarga",
+                                  "3"=>"3. Tim Partai",
+                                  "4"=>"4. Primodial (club, perkumpulan, dll",
+                                  "5"=>"5. Birokrat",
+                                  "6"=>"6. relawan",
                                 );
 
       $this->listKontak = array( ""=>"Semua",
@@ -154,7 +157,7 @@
       $idMaster = $this->mInterview->id;
 
       for ($i = 0; $i < count($pertanyaan) ; $i++) {          
-          if($pertanyaan[$i]!="" && $jawaban[$i]!=""){
+          if($pertanyaan[$i]!="" ){
             $this->dInterview->m_interview_id = $idMaster;
             $this->dInterview->pertanyaan = $pertanyaan[$i];
             $this->dInterview->jawaban = $jawaban[$i];
@@ -274,6 +277,7 @@
         $filterData['pilihans'] = $this->input->post('pilihan');
         $filterData['pemilihs'] = $this->input->post('pemilih');
         $filterData['kontaks'] = $this->input->post('kontak');
+        $filterData['tpss'] = $this->input->post('tps');
         $filterData['limitkons'] = $this->input->post('limit');
         $this->session->set_userdata($filterData);
       }
@@ -286,6 +290,7 @@
       $pilihan = $this->session->userdata('pilihans');
       $tipePemilih = $this->session->userdata('pemilihs');
       $kontak = $this->session->userdata('kontaks');
+      $tps = $this->session->userdata('tpss');
       $limit = $this->session->userdata('limitkons');
       
       $dataPemilih = array();
@@ -309,6 +314,7 @@
       $data['kota'] = $kota;
       $data['kecamatan'] = $kecamatan;
       $data['kelurahan'] = $kelurahan;
+      $data['tps'] = $tps;
       $data['search'] = $search;
       $data['limit'] = $limit;
 
@@ -320,6 +326,7 @@
       $this->pemilih->pilihan = $pilihan;
       $this->pemilih->tipePemilih = $tipePemilih;
       $this->pemilih->kontak = $kontak;
+      $this->pemilih->tps = $tps;
 
       if ($provinsi != "") {
         $tPemilih = $this->pemilih->getTotalData($search);
@@ -332,8 +339,6 @@
           $dataPemilih[$i]['nik'] = $dPemilih[$i]->nik;
           $dataPemilih[$i]['nama'] = $dPemilih[$i]->nama;
           $dataPemilih[$i]['tempat_lahir'] = $dPemilih[$i]->tempat_lahir;
-          // $dataPemilih[$i]['tanggal_lahir'] = $dPemilih[$i]->tanggal_lahir;
-          // $dataPemilih[$i]['gender'] = $dPemilih[$i]->gender;
           $dataPemilih[$i]['nama_kelurahan'] = $dPemilih[$i]->nama_kelurahan;
           $dataPemilih[$i]['tps'] = $dPemilih[$i]->tps;
           $dataPemilih[$i]['tipe_pemilih'] = $dPemilih[$i]->tipe_pemilih;
@@ -353,8 +358,6 @@
           $dataPemilih[$i]['nama_provinsi'] = $this->provinsi->name;
           $dataPemilih[$i]['nama_kota'] = $this->kota->name;
           $dataPemilih[$i]['nama_kecamatan'] = $this->kecamatan->name;
-
-          // $dataPemilih[$i]['pilihan'] = $this->pilihan[$dPemilih[$i]->memilih];
           $dataPemilih[$i]['pilihan'] = $dPemilih[$i]->memilih;
           $dataPemilih[$i]['jumPemilih'] = $dPemilih[$i]->banyak_pemilih;
           $dataPemilih[$i]['kontak'] = $dPemilih[$i]->kontak;
@@ -383,10 +386,6 @@
       $data["paginator"] = $this->pagination->create_links();
       $data["totalData"] = $tPemilih;
 
-      // $this->pemilih->provinsi = false;
-      // $this->pemilih->kota = false;
-      // $this->pemilih->kecamatan = false;
-      // $this->pemilih->kelurahan = false;
       if($tPemilih > 0){
         $this->pemilih->memilih = idCaleg;
         $this->pemilih->pilihan = false;
@@ -449,19 +448,22 @@
       $this->mInterview->pemilih_id = $idPemilih;
       $this->mInterview->user_id = "1";
       $this->mInterview->memilih = "0";
+      $this->mInterview->tipe_pemilih = "R";
 
       $this->pemilih->memilih = idCaleg;
       $this->pemilih->id = $idPemilih;
       $this->pemilih->save();
+
       $this->mInterview->memilih = $jawaban[0];
-      $this->mInterview->banyak_pemilih = $jawaban[1];
-      $this->mInterview->kontak = $jawaban[2];
+      $this->mInterview->tipe_pemilih = $jawaban[1];
+      $this->mInterview->banyak_pemilih = $jawaban[2];
+      $this->mInterview->kontak = $jawaban[3];
 
       $this->mInterview->simpan();
       $idMaster = $this->mInterview->id;
 
       for ($i = 0; $i < count($pertanyaan) ; $i++) {          
-          if($pertanyaan[$i]!="" && $jawaban[$i]!=""){
+          if($pertanyaan[$i]!=""){
             $this->dInterview->m_interview_id = $idMaster;
             $this->dInterview->pertanyaan = $pertanyaan[$i];
             $this->dInterview->jawaban = $jawaban[$i];
@@ -470,5 +472,13 @@
       }
       redirect(base_url()."pemilih/konsolidasi/");
     }  
+
+    function hapusKonsolidasi(){
+      $id = $this->uri->segment(3);
+      $this->pemilih->hapusKonsolidasi($id);
+
+      $this->session->set_flashdata('success', 'Berhasil hapus data konsolidasi');  
+      header("Location: " . $_SERVER["HTTP_REFERER"]);  
+    }
   }
 ?>

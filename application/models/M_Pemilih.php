@@ -128,6 +128,14 @@
         $this->db->where("m_interview.tipe_pemilih", $this->tipePemilih);
       }
 
+      if($this->kontak == "0"){
+       $this->db->where("m_interview.kontak = '' "); 
+      }
+
+      elseif($this->kontak == "1"){
+       $this->db->where("m_interview.kontak != '' "); 
+      }
+
       $this->db->select(
         "count(*) as total"
       );
@@ -307,6 +315,18 @@
         $this->db->where("m_interview.memilih", $this->pilihan);
       }
 
+      if( $this->tipePemilih != '' ){
+        $this->db->where("m_interview.tipe_pemilih", $this->tipePemilih);
+      }
+
+      if($this->kontak == "0"){
+       $this->db->where("m_interview.kontak = '' "); 
+      }
+
+      elseif($this->kontak == "1"){
+       $this->db->where("m_interview.kontak != '' "); 
+      }
+
       $this->db->select(
         "sum(m_interview.banyak_pemilih) as total"
       );
@@ -314,6 +334,16 @@
       $this->db->join("m_interview","m_interview.pemilih_id = pemilih.id", "left");
       $result = $this->db->get();
       return $result->row()->total;  
+    }
+
+    public function hapusKonsolidasi($id){
+      $wherePemilih['id'] = $id;
+      $whereInterview['pemilih_id'] = $id;
+      $data['memilih'] = 0;
+
+      $this->db->delete('m_interview', $whereInterview);
+      $this->db->update('pemilih', $data, $wherePemilih);
+      return true;
     }
 
 

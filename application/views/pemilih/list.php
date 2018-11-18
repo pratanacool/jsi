@@ -60,7 +60,7 @@
               <label for="icon_prefix">Kelurahan</label>
             </div>
             
-            <div class="input-field col s5">
+            <div class="input-field col s6">
               <input placeholder="Nama / NIk" type="text" name="search" value="<?php echo $search;?>">
               <label for="icon_email">Nama / Nik</label>
             </div>
@@ -72,7 +72,7 @@
               <label for="icon_prefix">Banyak Data</label>
             </div>
 
-            <div class="input-field col s2 offset-s4">
+            <div class="input-field col s2">
               <div class="input-field col s12">
                 <button class="btn cyan waves-effect waves-light right-align" type="submit" name="action" value="search"><i class="mdi-action-search"></i> Cari</button>
               </div>
@@ -116,11 +116,11 @@
                   echo "<td id='tempatLahir{$id}'>".$row['tempat_lahir']."</td>";
                   echo "<td>".$row['nama_kecamatan']."</td>";
                   echo "<td>".$row['nama_kelurahan']."</td>";
-                  echo "<td>TPS ".$row['tps']."</td>";
+                  echo "<td style='padding-left:15px'>".$row['tps']."</td>";
                   echo "<td>";
-                    echo "<a class='btn-floating waves-effect waves-light tooltipped modal-trigger orange' data-tooltip='Edit data pemilih' href='#modalEdit' onclick='edit({$id})'><i class='mdi-editor-mode-edit' alt='edit'></i></a>"; 
+                    echo "<a class='btn-floating waves-effect waves-light tooltipped modal-trigger orange' data-tooltip='Edit Data Pemilih' href='#modalEdit' onclick='edit({$id})'><i class='mdi-editor-mode-edit' alt='edit'></i></a>"; 
                       if($row['memilih'] == null){
-                        echo " | <a class='btn-floating waves-effect waves-light tooltipped modal-trigger blue' data-tooltip='Interview pemilih' onclick='edit({$id})' href='#modalInterview'><i class='mdi-action-assignment'></i></a>";
+                        echo " | <a class='btn-floating waves-effect waves-light tooltipped modal-trigger blue' data-tooltip='Interview Pemilih' onclick='edit({$id})' href='#modalInterview'><i class='mdi-action-assignment'></i></a>";
                       }
                   echo "</td>";
                 echo "</tr>";

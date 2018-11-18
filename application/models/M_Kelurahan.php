@@ -83,5 +83,13 @@
       return true;
     }
 
+    public function getAllDataTps($id){
+        $this->db->where("kelurahan", $id);
+        $this->db->select('distinct(tps) as tps');
+        $this->db->order_by('tps','asc');
+        $result = $this->db->get('pemilih');
+        return $result;
+    }
+
   }
 ?>

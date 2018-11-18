@@ -10,12 +10,12 @@
     <title>E-DPT</title>
 
     <!-- Favicons-->
-    <link rel="icon" href="<?php echo base_url('assets');?>/images/favicon/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" href="<?php echo base_url('assets');?>/images/favicon/jsi-32x32.png" sizes="32x32">
     <!-- Favicons-->
-    <link rel="apple-touch-icon-precomposed" href="<?php echo base_url('assets');?>/images/favicon/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon-precomposed" href="<?php echo base_url('assets');?>/images/favicon/jsi-152x152.png">
     <!-- For iPhone -->
     <meta name="msapplication-TileColor" content="#00bcd4">
-    <meta name="msapplication-TileImage" content="<?php echo base_url('assets');?>/images/favicon/mstile-144x144.png">
+    <meta name="msapplication-TileImage" content="<?php echo base_url('assets');?>/images/favicon/jsi-144x144.png">
     <!-- For Windows Phone -->
 
 

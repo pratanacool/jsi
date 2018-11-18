@@ -65,6 +65,17 @@
       echo json_encode($listKelurahan);
     }
 
+    public function listTps(){
+      $idKelurahan = $this->input->post("id");
+      $rsKelurahan = $this->kelurahan->getAllDataTps($idKelurahan)->result();
+      $listKelurahan = array();
+      foreach ($rsKelurahan as $value) {
+        $listKelurahan[$value->tps] = $value->tps;
+      }
+      echo json_encode($listKelurahan);
+
+    }
+
 
 
   }

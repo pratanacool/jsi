@@ -1,4 +1,7 @@
-<?php if($this->session->flashdata('success')){ ?>
+<?php 
+
+// var_dump($pemilih);die();
+if($this->session->flashdata('success')){ ?>
   <div id="card-alert" class="card green lighten-5">
     <div class="card-content green-text">
       <p><?php echo $this->session->flashdata('success'); ?></p>
@@ -29,7 +32,7 @@
           <h4 class="header2">Filter</h4>
           <div class="row">
 
-            <div class="input-field col s3">
+            <div class="input-field col s2">
               <?php
                 echo form_dropdown('provinsi', $listProvinsi, $provinsi, 'id="provinsi"');
               ?>
@@ -59,6 +62,14 @@
               </select>
               <label for="icon_prefix">Kelurahan</label>
             </div>
+
+            <div class="input-field col s1">
+              <input type="hidden" id="tpsx" value="<?php echo $tps; ?>">
+              <select name="tps" id="tps">
+                <option value="">Pilih TPS</option>
+              </select>
+              <label for="icon_prefix">TPS</label>
+            </div>
             
 
             <div class="input-field col s3">
@@ -69,14 +80,14 @@
             </div>             
 
 
-            <div class="input-field col s2">
+            <div class="input-field col s3">
               <?php
                 echo form_dropdown('pemilih', $listTipePemilih, $tipePemilih);
               ?>
               <label for="icon_prefix">Tipe Pemilih</label>
             </div>  
 
-            <div class="input-field col s2">
+            <div class="input-field col s3">
               <?php
                 echo form_dropdown('kontak', $listKontak, $kontak);
               ?>
@@ -84,7 +95,7 @@
             </div>  
 
 
-            <div class="input-field col s1  offset-s4">
+            <div class="input-field col s1">
               <?php
                 echo form_dropdown('limit', $listLimit, $limit);
               ?>
@@ -132,8 +143,10 @@
                 <th>Kecamatan</th>
                 <th>Kelurahan</th>
                 <th>TPS</th>
+
                 <th>Pilihan pilleg</th>
                 <th>Jumlah pemilih</th>
+
                 <th>Nomor Kontak</th>
                 <th>Tipe Pemilih</th>
                 <th>Action</th>
@@ -151,15 +164,18 @@
                   echo "<td>".$row['nama_kota']."</td>";
                   echo "<td>".$row['nama_kecamatan']."</td>";
                   echo "<td>".$row['nama_kelurahan']."</td>";
-                  echo "<td>TPS ".$row['tps']."</td>";
+                  echo "<td style='text-align:center'>".$row['tps']."</td>";
                   echo "<td style='text-align:center'>".$row['pilihan']."</td>";
-                  echo "<td style='text-align:right'>".$row['jumPemilih']."</td>";
-                  echo "<td style='text-align:right'>".$row['kontak']."</td>";
-                  echo "<td style='text-align:right'>".$row['tipe_pemilih']."</td>";
+                  echo "<td style='text-align:center'>".$row['jumPemilih']."</td>";
+                  echo "<td style='text-align:left'>".$row['kontak']."</td>";
+                  echo "<td style='text-align:center'>".$row['tipe_pemilih']."</td>";
                   echo "<td style='text-align:center'>";
-                    echo "<a class='btn-floating waves-effect waves-light tooltipped modal-trigger blue' data-tooltip='Interview pemilih' onclick='view($id)' href='#modalInterview'><i class='mdi-action-assignment'></i></a>";
+                    echo "<a class='btn-floating waves-effect waves-light tooltipped modal-trigger blue' data-tooltip='Detail Interview' onclick='view($id)' href='#modalInterview'><i class='mdi-action-assignment'></i></a>";
 
-                    echo "<a class='btn-floating waves-effect waves-light tooltipped modal-trigger orange' data-tooltip='Interview pemilih' onclick='edit($id)' href='#modalEditInterview'><i class='mdi-action-assignment-late'></i></a>";
+                    echo "<a class='btn-floating waves-effect waves-light tooltipped modal-trigger orange' data-tooltip='Edit Interview' onclick='edit($id)' href='#modalEditInterview'><i class='mdi-action-assignment-late'></i></a>";
+
+                    echo "<a class='btn-floating waves-effect waves-light tooltipped modal-trigger red' data-tooltip='Hapus Konsolidasi' href='".base_url('pemilih/hapusKonsolidasi/').$id."' ><i class='mdi-action-delete'></i></a>";
+
                   echo "</td>";
                 echo "</tr>";
               }
@@ -219,14 +235,18 @@
                 };
   
   var tipePemilih={
-                    "1":"Relawan",
-                    "2":"Kerabat / Keluarga",
-                    "3":"Pemilih Biasa"
+                    "1":"1. Tim Profesional",
+                    "2":"2. Kerabat / Keluarga",
+                    "3":"3. Tim Partai",
+                    "4":"4. Primodial (club, perkumpulan, dll",
+                    "5":"5. Birokrat",
+                    "6":"6. relawan",
                   };
 
   setKota();
   setKecamatan();
   setKelurahan();
+  setTps();
 
   $("#provinsi").change(function(event){
     getKota(this.value);
@@ -239,6 +259,10 @@
   $("#kecamatan").change(function(event){
     getKelurahan(this.value);
   });
+
+  $("#kelurahan").change(function(event) {
+    getTps(this.value);
+  })
 
   function setKota(){
     provinsi = $("#provinsi").val();
@@ -261,6 +285,14 @@
     kelurahan = $("#kelurahanx").val();
     if(kecamatan != ""){
       getKelurahan(kecamatan, kelurahan);
+    }
+  }
+
+  function setTps(){
+    kelurahan = $("#kelurahanx").val();
+    tps = $("#tpsx").val();
+    if(kelurahan != ""){
+      getTps(kelurahan, tps);
     }
   }
 
@@ -394,6 +426,44 @@
       }
       
     });
+  }  
+
+  function getTps(idKelurahan, tps=""){
+    $.post('<?php echo base_url();?>kelurahan/listTps', {id:idKelurahan},
+    function(data, response) {
+      try{
+          var hasil = jQuery.parseJSON(data);
+          var options =[];
+
+          $.each(hasil, function(key, value) {
+              options.push(
+                {v:value, k: key}
+              );
+          });
+
+          $("#tps").empty();
+
+          var $newOptawal = $("<option>").attr("value","").text("Pilih TPS");
+          $("#tps").append($newOptawal);
+          $.each(options, function(jk, itemk){
+            
+            i = itemk.k;
+            item = itemk.v
+
+            if (i == tps) {  selected = true; } else {  selected = false; }
+            var $newOpt = $("<option>").attr("value",i).text(item).prop('selected', selected);
+            $("#tps").append($newOpt);
+            
+          });
+          $("#tps").material_select();    
+      }
+      catch(ex){
+        console.log("error "+ex);
+        $("#tps").empty();
+        $("#tps").append("<option value=''>Pilih TPS</option>");
+      }
+      
+    });
   }
 
   var a=0;
@@ -497,8 +567,11 @@
             else{
               interview +="<div class='input-field col m6'><input name='jawaban[]' type='text' value='"+item.jawaban+"'></div>";  
             }
+            
+            if(j>4){
+              interview += "<a class='btn-floating waves-effect waves-light tooltipped red' data-tooltip='Hapus pertanyaan' onclick='hapus("+j+")' style='margin-top:15px'><i class='mdi-action-delete'></i></a>"; 
+            }
 
-            interview += "<a class='btn-floating waves-effect waves-light tooltipped red' data-tooltip='Hapus pertanyaan' onclick='hapus("+j+")' style='margin-top:15px'><i class='mdi-action-delete'></i></a>"; 
             interview +="</div>";
 
           });
