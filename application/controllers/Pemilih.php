@@ -182,6 +182,7 @@
         $filterData['kelurahan'] = $this->input->post('kelurahan');
         $filterData['search'] = $this->input->post('search');
         $filterData['limit'] = $this->input->post('limit');
+        $filterData['tps'] = $this->input->post('tps');
         $this->session->set_userdata($filterData);
       }
 
@@ -191,6 +192,7 @@
       $kelurahan = $this->session->userdata('kelurahan');
       $search = $this->session->userdata('search');
       $limit = $this->session->userdata('limit');
+      $tps = $this->session->userdata('tps');
 
       $dPemilih = array();
       $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
@@ -209,11 +211,14 @@
       $data['kelurahan'] = $kelurahan;
       $data['search'] = $search;
       $data['limit'] = $limit;
+      $data['tps'] = $tps;
 
       $this->pemilih->provinsi = $provinsi;
       $this->pemilih->kota = $kota;
       $this->pemilih->kecamatan = $kecamatan;
       $this->pemilih->kelurahan = $kelurahan;
+      $this->pemilih->tps = $tps;
+
 
       if ($provinsi != "" or $search !="") {
         $tPemilih = $this->pemilih->getTotalData($search);

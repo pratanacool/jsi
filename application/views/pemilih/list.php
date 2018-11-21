@@ -29,7 +29,7 @@
           <h4 class="header2">Filter</h4>
           <div class="row">
 
-            <div class="input-field col s3">
+            <div class="input-field col s2">
               <?php
                 echo form_dropdown('provinsi', $listProvinsi, $provinsi, 'id="provinsi"');
               ?>
@@ -58,6 +58,14 @@
                 <option value="">Pilih Kelurahan</option>
               </select>
               <label for="icon_prefix">Kelurahan</label>
+            </div>
+
+            <div class="input-field col s1">
+              <input type="hidden" id="tpsx" value="<?php echo $tps; ?>">
+              <select name="tps" id="tps">
+                <option value="">Pilih TPS</option>
+              </select>
+              <label for="icon_prefix">TPS</label>
             </div>
             
             <div class="input-field col s6">
@@ -234,6 +242,7 @@
   setKota();
   setKecamatan();
   setKelurahan();
+  setTps();
 
   $("#provinsi").change(function(event){
     getKota(this.value);
@@ -246,6 +255,10 @@
   $("#kecamatan").change(function(event){
     getKelurahan(this.value);
   });
+
+  $("#kelurahan").change(function(event) {
+    getTps(this.value);
+  })
 
   function setKota(){
     provinsi = $("#provinsi").val();
@@ -268,6 +281,14 @@
     kelurahan = $("#kelurahanx").val();
     if(kecamatan != ""){
       getKelurahan(kecamatan, kelurahan);
+    }
+  }
+
+  function setTps(){
+    kelurahan = $("#kelurahanx").val();
+    tps = $("#tpsx").val();
+    if(kelurahan != ""){
+      getTps(kelurahan, tps);
     }
   }
 
@@ -402,6 +423,46 @@
       
     });
   }
+
+  function getTps(idKelurahan, tps=""){
+    $.post('<?php echo base_url();?>kelurahan/listTps', {id:idKelurahan},
+    function(data, response) {
+      try{
+          var hasil = jQuery.parseJSON(data);
+          var options =[];
+
+          $.each(hasil, function(key, value) {
+              options.push(
+                {v:value, k: key}
+              );
+          });
+
+          $("#tps").empty();
+
+          var $newOptawal = $("<option>").attr("value","").text("Pilih TPS");
+          $("#tps").append($newOptawal);
+          $.each(options, function(jk, itemk){
+            
+            i = itemk.k;
+            item = itemk.v
+
+            if (i == tps) {  selected = true; } else {  selected = false; }
+            var $newOpt = $("<option>").attr("value",i).text(item).prop('selected', selected);
+            $("#tps").append($newOpt);
+            
+          });
+          $("#tps").material_select();    
+      }
+      catch(ex){
+        console.log("error "+ex);
+        $("#tps").empty();
+        $("#tps").append("<option value=''>Pilih TPS</option>");
+      }
+      
+    });
+  }
+
+
   var a=5;
   window.setTimeout(function() {
       $("#card-alert").fadeTo(500, 0).slideUp(500, function(){
