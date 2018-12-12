@@ -86,6 +86,12 @@
               </div>
             </div>
 
+            <div class="input-field col s2">
+              <div class="input-field col s12">
+                <a class="btn green waves-effect waves-light right-align" href="<?php echo base_url();?>pemilih/downloadPemilih" target="_blank"><i class="mdi-file-cloud-download"></i> Download</a>
+              </div>
+            </div>
+
           </div>
         <!-- </div> -->
         </form>

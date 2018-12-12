@@ -72,13 +72,13 @@ if($this->session->flashdata('success')){ ?>
             </div>
             
 
-            <div class="input-field col s3">
+
+            <div class="input-field col s2">
               <?php
                 echo form_dropdown('pilihan', $listPilihan, $pilihan);
               ?>
               <label for="icon_prefix">Kategori</label>
             </div>             
-
 
             <div class="input-field col s3">
               <?php
@@ -87,13 +87,12 @@ if($this->session->flashdata('success')){ ?>
               <label for="icon_prefix">Tipe Pemilih</label>
             </div>  
 
-            <div class="input-field col s3">
+            <div class="input-field col s2">
               <?php
                 echo form_dropdown('kontak', $listKontak, $kontak);
               ?>
               <label for="icon_prefix">Kontak Pemilih</label>
             </div>  
-
 
             <div class="input-field col s1">
               <?php
@@ -105,6 +104,12 @@ if($this->session->flashdata('success')){ ?>
             <div class="input-field col s2">
               <div class="input-field col s12">
                 <button class="btn cyan waves-effect waves-light right-align" type="submit" name="action" value="search"><i class="mdi-action-search"></i> Cari</button>
+              </div>
+            </div>
+
+            <div class="input-field col s2">
+              <div class="input-field col s12">
+                <a class="btn green waves-effect waves-light right-align" href="<?php echo base_url();?>pemilih/downloadKonsolidasi" target="_blank"><i class="mdi-file-cloud-download"></i> Download</a>
               </div>
             </div>
 

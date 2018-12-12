@@ -1,4 +1,10 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
+  require ('./application/third_party/vendor/autoload.php');
+
+  use PhpOffice\PhpSpreadsheet\Helper\Sample;
+  use PhpOffice\PhpSpreadsheet\IOFactory;
+  use PhpOffice\PhpSpreadsheet\Spreadsheet;
+
   class Pemilih extends MY_Controller{
     
     function __construct(){
@@ -485,5 +491,229 @@
       $this->session->set_flashdata('success', 'Berhasil hapus data konsolidasi');  
       header("Location: " . $_SERVER["HTTP_REFERER"]);  
     }
+
+    public function downloadPemilih()
+    {
+      $this->load->model('M_Kecamatan', 'kecamatan', true);
+
+      $provinsi = $this->session->userdata('provinsi');
+      $kota = $this->session->userdata('kota');
+      $kecamatan = $this->session->userdata('kecamatan');
+      $kelurahan = $this->session->userdata('kelurahan');
+      $search = $this->session->userdata('search');
+      $limit = 1000000000;
+      $page = 0;
+      $tps = $this->session->userdata('tps');
+
+      $this->pemilih->provinsi = $provinsi;
+      $this->pemilih->kota = $kota;
+      $this->pemilih->kecamatan = $kecamatan;
+      $this->pemilih->kelurahan = $kelurahan;
+      $this->pemilih->tps = $tps;
+
+      if ($provinsi != "" or $search !="") {
+        $tPemilih = $this->pemilih->getTotalData($search);
+        $config['total_rows'] = $tPemilih;
+
+        $dPemilih = $this->pemilih->getAllData($page, $limit, $search)->result();
+      } 
+
+      for($i = 0; $i < count($dPemilih);$i++){
+        $dataPemilih[$i]['id'] = $dPemilih[$i]->id;
+        $dataPemilih[$i]['nik'] = $dPemilih[$i]->nik;
+        $dataPemilih[$i]['nama'] = $dPemilih[$i]->nama;
+        $dataPemilih[$i]['tempat_lahir'] = $dPemilih[$i]->tempat_lahir;
+        $dataPemilih[$i]['nama_kelurahan'] = $dPemilih[$i]->nama_kelurahan;
+        $dataPemilih[$i]['tps'] = $dPemilih[$i]->tps;
+        $dataPemilih[$i]['memilih'] = $dPemilih[$i]->memilih;
+
+        $this->kecamatan->name = false;
+        $this->kecamatan->id = $dPemilih[$i]->kecamatan;
+        $this->kecamatan->getData();
+
+        $dataPemilih[$i]['nama_kecamatan'] = $this->kecamatan->name;
+      }
+
+      $spreadSheet = new Spreadsheet();
+      $spreadSheet->getProperties()->setCreator('Pratama Ridzky')
+      ->setLastModifiedBy('Pratama Ridzky')
+      ->setTitle('Office 2007 XLSX Test Document')
+      ->setSubject('Office 2007 XLSX Test Document')
+      ->setDescription('JSI Export file excel')
+      ->setKeywords('office 2007 openxml php')
+      ->setCategory('Report Excel');
+
+
+      $spreadSheet->setActiveSheetIndex(0)
+      ->setCellValue('A1', 'NIK')
+      ->setCellValue('B1', 'NAMA')
+      ->setCellValue('C1', 'TEMPAT LAHIR')
+      ->setCellValue('D1', 'KECAMATAN')
+      ->setCellValue('E1', 'KELURAHAN')
+      ->setCellValue('F1', 'TPS')
+      ;
+
+      $row = 1;
+      for ($i = 0; $i < count($dataPemilih); $i++) {
+        $row++; 
+        $spreadSheet->setActiveSheetIndex(0)
+        ->setCellValue('A'.$row, $dataPemilih[$i]['nik'])
+        ->setCellValue('B'.$row, $dataPemilih[$i]['nama'])
+        ->setCellValue('C'.$row, $dataPemilih[$i]['tempat_lahir'])
+        ->setCellValue('D'.$row, $dataPemilih[$i]['nama_kecamatan'])
+        ->setCellValue('E'.$row, $dataPemilih[$i]['nama_kelurahan'])
+        ->setCellValue('F'.$row, $dataPemilih[$i]['tps'])
+        ;
+      }
+
+      $spreadSheet->getActiveSheet()->setTitle('Report Pemilih '.date('d-m-Y H'));
+
+      $spreadSheet->setActiveSheetIndex(0);
+
+      // Redirect output to a client’s web browser (Xlsx)
+      header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      header('Content-Disposition: attachment;filename="Report Pemilih.xlsx"');
+      header('Cache-Control: max-age=0');
+      header('Cache-Control: max-age=1');
+
+      // If you're serving to IE over SSL, then the following may be needed
+      header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+      header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
+      header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+      header('Pragma: public'); // HTTP/1.0
+
+      $writer = IOFactory::createWriter($spreadSheet, 'Xlsx');
+      $writer->save('php://output');
+      exit;
+    }    
+
+    public function downloadKonsolidasi()
+    {      
+      $this->load->model('M_Provinsi', 'provinsi', true);
+      $this->load->model('M_Kota', 'kota', true);
+      $this->load->model('M_Kecamatan', 'kecamatan', true);
+
+      $provinsi = $this->session->userdata('provinsikons');
+      $kota = $this->session->userdata('kotakons');
+      $kecamatan = $this->session->userdata('kecamatankons');
+      $kelurahan = $this->session->userdata('kelurahankons');
+      $search = $this->session->userdata('searchkons');
+      $pilihan = $this->session->userdata('pilihans');
+      $tipePemilih = $this->session->userdata('pemilihs');
+      $kontak = $this->session->userdata('kontaks');
+      $tps = $this->session->userdata('tpss');      
+      $limit = 1000000000;
+      $page = 0;
+
+      $this->pemilih->provinsi = $provinsi;
+      $this->pemilih->kota = $kota;
+      $this->pemilih->kecamatan = $kecamatan;
+      $this->pemilih->kelurahan = $kelurahan;
+      $this->pemilih->memilih = idCaleg;
+      $this->pemilih->pilihan = $pilihan;
+      $this->pemilih->tipePemilih = $tipePemilih;
+      $this->pemilih->kontak = $kontak;
+      $this->pemilih->tps = $tps;
+
+      if ($provinsi != "") {
+        $tPemilih = $this->pemilih->getTotalData($search);
+        $config['total_rows'] = $tPemilih;
+
+        $dPemilih = $this->pemilih->getAllData($page, $limit, $search)->result();
+        
+        for($i = 0; $i < count($dPemilih);$i++){
+          $dataPemilih[$i]['id'] = $dPemilih[$i]->id;
+          $dataPemilih[$i]['nik'] = $dPemilih[$i]->nik;
+          $dataPemilih[$i]['nama'] = $dPemilih[$i]->nama;
+          $dataPemilih[$i]['tempat_lahir'] = $dPemilih[$i]->tempat_lahir;
+          $dataPemilih[$i]['nama_kelurahan'] = $dPemilih[$i]->nama_kelurahan;
+          $dataPemilih[$i]['tps'] = $dPemilih[$i]->tps;
+          $dataPemilih[$i]['tipe_pemilih'] = $dPemilih[$i]->tipe_pemilih;
+          
+          $this->kecamatan->provinsi = false;
+          $this->provinsi->id = $dPemilih[$i]->provinsi;
+          $this->provinsi->getData();
+          
+          $this->kota->name = false;
+          $this->kota->id = $dPemilih[$i]->kota;
+          $this->kota->getData();
+
+          $this->kecamatan->name = false;
+          $this->kecamatan->id = $dPemilih[$i]->kecamatan;
+          $this->kecamatan->getData();
+
+          $dataPemilih[$i]['nama_provinsi'] = $this->provinsi->name;
+          $dataPemilih[$i]['nama_kota'] = $this->kota->name;
+          $dataPemilih[$i]['nama_kecamatan'] = $this->kecamatan->name;
+          $dataPemilih[$i]['pilihan'] = $dPemilih[$i]->memilih;
+          $dataPemilih[$i]['jumPemilih'] = $dPemilih[$i]->banyak_pemilih;
+          $dataPemilih[$i]['kontak'] = $dPemilih[$i]->kontak;
+        }
+
+      }
+
+      $spreadSheet = new Spreadsheet();
+      $spreadSheet->getProperties()->setCreator('Pratama Ridzky')
+      ->setLastModifiedBy('Pratama Ridzky')
+      ->setTitle('Office 2007 XLSX Test Document')
+      ->setSubject('Office 2007 XLSX Test Document')
+      ->setDescription('JSI Export file excel')
+      ->setKeywords('office 2007 openxml php')
+      ->setCategory('Report Excel');
+
+
+      $spreadSheet->setActiveSheetIndex(0)
+      ->setCellValue('A1', 'NIK')
+      ->setCellValue('B1', 'NAMA')
+      ->setCellValue('C1', 'PROVINSI')
+      ->setCellValue('D1', 'KOTA')
+      ->setCellValue('E1', 'KECAMATAN')
+      ->setCellValue('F1', 'KELURAHAN')
+      ->setCellValue('G1', 'TPS')
+      ->setCellValue('H1', 'PILIHAN PILEG')
+      ->setCellValue('I1', 'JUMLAH PEMILIH')
+      ->setCellValue('J1', 'TIPE PEMILIH')
+      ->setCellValue('K1', 'NOMOR KONTAK')
+      ;
+
+      $row = 1;
+      for ($i = 0; $i < count($dataPemilih); $i++) {
+        $row++; 
+        $spreadSheet->setActiveSheetIndex(0)
+        ->setCellValue('A'.$row, $dataPemilih[$i]['nik'])
+        ->setCellValue('B'.$row, $dataPemilih[$i]['nama'])
+        ->setCellValue('C'.$row, $dataPemilih[$i]['nama_provinsi'])
+        ->setCellValue('D'.$row, $dataPemilih[$i]['nama_kota'])
+        ->setCellValue('E'.$row, $dataPemilih[$i]['nama_kecamatan'])
+        ->setCellValue('F'.$row, $dataPemilih[$i]['nama_kelurahan'])
+        ->setCellValue('G'.$row, $dataPemilih[$i]['tps'])
+        ->setCellValue('H'.$row, $dataPemilih[$i]['pilihan'])
+        ->setCellValue('I'.$row, $dataPemilih[$i]['jumPemilih'])
+        ->setCellValue('J'.$row, $dataPemilih[$i]['tipe_pemilih'])
+        ->setCellValue('K'.$row, $dataPemilih[$i]['kontak'])
+        ;
+      }
+
+      $spreadSheet->getActiveSheet()->setTitle('Konsolidasi '.date('d-m-Y H'));
+
+      $spreadSheet->setActiveSheetIndex(0);
+
+      // Redirect output to a client’s web browser (Xlsx)
+      header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      header('Content-Disposition: attachment;filename="Report Konsolidasi.xlsx"');
+      header('Cache-Control: max-age=0');
+      header('Cache-Control: max-age=1');
+
+      // If you're serving to IE over SSL, then the following may be needed
+      header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+      header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
+      header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+      header('Pragma: public'); // HTTP/1.0
+
+      $writer = IOFactory::createWriter($spreadSheet, 'Xlsx');
+      $writer->save('php://output');
+      exit;
+    }
+
   }
 ?>
