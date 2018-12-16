@@ -501,17 +501,17 @@
       $kecamatan = $this->session->userdata('kecamatan');
       $kelurahan = $this->session->userdata('kelurahan');
       $search = $this->session->userdata('search');
-      $limit = 1000000000;
-      $page = 0;
       $tps = $this->session->userdata('tps');
+      $limit = $this->session->userdata('limit');
 
       $this->pemilih->provinsi = $provinsi;
       $this->pemilih->kota = $kota;
       $this->pemilih->kecamatan = $kecamatan;
       $this->pemilih->kelurahan = $kelurahan;
       $this->pemilih->tps = $tps;
+      $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
 
-      if ($provinsi != "" or $search !="") {
+      if ($provinsi != "" or $search !="") {        
         $tPemilih = $this->pemilih->getTotalData($search);
         $config['total_rows'] = $tPemilih;
 
@@ -602,8 +602,8 @@
       $tipePemilih = $this->session->userdata('pemilihs');
       $kontak = $this->session->userdata('kontaks');
       $tps = $this->session->userdata('tpss');      
-      $limit = 1000000000;
-      $page = 0;
+      $limit = $this->session->userdata('limitkons');
+      $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
 
       $this->pemilih->provinsi = $provinsi;
       $this->pemilih->kota = $kota;

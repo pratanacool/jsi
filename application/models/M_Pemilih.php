@@ -21,15 +21,15 @@
     }
     
     public function getAllData($offset = null, $limit = null, $search = null){
-      if( $this->provinsi != null ){
+      if( $this->provinsi != null && $this->kota == null){
         $this->db->where(array("provinsi" => $this->provinsi));
       } 
 
-      if( $this->kota != null ){
+      if( $this->kota != null && $this->kecamatan == null){
         $this->db->where(array("kota" => $this->kota));
       }
 
-      if( $this->kecamatan != null ){
+      if( $this->kecamatan != null && $this->kelurahan == null){
         $this->db->where(array("kecamatan" => $this->kecamatan));
       }
 
@@ -85,22 +85,25 @@
 
       $this->db->order_by("pemilih.tps","asc");
       $this->db->order_by("pemilih.nama","asc");
-      $this->db->limit($limit, $offset);
+      if($limit){
+        $this->db->limit($limit, $offset);
+      }
       $result = $this->db->get();
+      // var_dump($this->db->last_query());die();
       return $result;
     }
 
     public function getTotalData($search = null){
       
-      if( $this->provinsi != null ){
+      if( $this->provinsi != null && $this->kota == null){
         $this->db->where(array("provinsi" => $this->provinsi));
       } 
 
-      if( $this->kota != null ){
+      if( $this->kota != null && $this->kecamatan == null){
         $this->db->where(array("kota" => $this->kota));
       }
 
-      if( $this->kecamatan != null ){
+      if( $this->kecamatan != null && $this->kelurahan == null ){
         $this->db->where(array("kecamatan" => $this->kecamatan));
       }
 

@@ -22,6 +22,10 @@ if($this->session->flashdata('success')){ ?>
   </div>
 <?php } ?>
 
+<?php 
+  $page = $this->uri->segment(3);
+?>
+
 <div class="row">
   <div class="col s12 m12 l12">
     <div class="card-panel">
@@ -109,7 +113,7 @@ if($this->session->flashdata('success')){ ?>
 
             <div class="input-field col s2">
               <div class="input-field col s12">
-                <a class="btn green waves-effect waves-light right-align" href="<?php echo base_url();?>pemilih/downloadKonsolidasi" target="_blank"><i class="mdi-file-cloud-download"></i> Download</a>
+                <a class="btn green waves-effect waves-light right-align" href="<?php echo base_url();?>pemilih/downloadKonsolidasi/<?php echo $page;?>" target="_blank"><i class="mdi-file-cloud-download"></i> Download</a>
               </div>
             </div>
 
