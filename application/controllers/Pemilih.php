@@ -8,6 +8,7 @@
   class Pemilih extends MY_Controller{
     
     function __construct(){
+
       parent ::__construct();
       $this->load->library('pagination');
       $this->load->model('M_Pemilih','pemilih',true);
@@ -30,6 +31,13 @@
       $this->listKontak = array( ""=>"Semua",
                                  "0"=>"Tidak Memberi Kontak",
                                  "1"=>"Memberi Kontak");
+
+      $role = $this->session->userdata('role');
+
+      if($role != '1'){
+        redirect(base_url()."login");
+      }
+
     }
 
     public function index(){
@@ -713,6 +721,67 @@
       $writer = IOFactory::createWriter($spreadSheet, 'Xlsx');
       $writer->save('php://output');
       exit;
+    }
+
+    public function tambah()
+    {
+      $listTPS = array();
+      
+      for ($i = 1; $i <= 40; $i++) {
+        array_push($listTPS, $i);    
+      }
+
+      $this->load->model("M_Provinsi");
+
+      $rsProvinsi = $this->M_Provinsi->getProvinsi()->result();
+
+      $listProvinsi[""] = "Pilih Provinsi";
+      foreach ($rsProvinsi as $value) {
+        $listProvinsi[$value->id] = $value->name;
+      }
+
+      $data['judul'] = "Tambah Pemilih";
+      $data['breadcrumbs'] = "";
+      $data['listProvinsi'] = $listProvinsi;
+      $data['listTPS'] = $listTPS;
+
+      $this->render_page('pemilih/form', $data);
+    }
+
+    public function simpanPemilih()
+    {
+      $nik = $this->input->post('nik');
+      $nama = $this->input->post('nama');
+      $tempatLahir = $this->input->post('tempatLahir');
+      $tanggalLahir = $this->input->post('tanggalLahir');
+      $provinsi = $this->input->post('provinsi');
+      $kota = $this->input->post('kota');
+      $kecamatan = $this->input->post('kecamatan');
+      $kelurahan = $this->input->post('kelurahan');
+      $tps = $this->input->post('tps');
+      
+      $this->pemilih->nik = $nik;
+      $this->pemilih->nama = $nama;
+      $this->pemilih->tempatLahir = $tempatLahir;
+      $this->pemilih->tanggalLahir = $tanggalLahir;
+      $this->pemilih->provinsi = $provinsi;
+      $this->pemilih->kota = $kota;
+      $this->pemilih->kecamatan = $kecamatan;
+      $this->pemilih->kelurahan = $kelurahan;
+      $this->pemilih->tps = $tps;
+      
+      $hasil = $this->pemilih->save();
+
+      if ($hasil == true) {
+        $this->session->set_flashdata('success', 'Berhasil tambah data pemilih');  
+      } 
+      else {
+        $this->session->set_flashdata('failed', 'Gagal tambah data pemilih');
+      }
+
+      header("Location: " . $_SERVER["HTTP_REFERER"]);  
+
+
     }
 
   }

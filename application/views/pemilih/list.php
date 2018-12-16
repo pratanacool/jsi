@@ -84,17 +84,19 @@
               <label for="icon_prefix">Banyak Data</label>
             </div>
 
-            <div class="input-field col s2">
-              <div class="input-field col s12">
+            <div class="input-field col s5">
+              <div class="input-field col s12 m3">
                 <button class="btn cyan waves-effect waves-light right-align" type="submit" name="action" value="search"><i class="mdi-action-search"></i> Cari</button>
               </div>
-            </div>
 
-            <div class="input-field col s2">
-              <div class="input-field col s12">
+              <div class="input-field col s12 m4">
                 <a class="btn green waves-effect waves-light right-align" href="<?php echo base_url();?>pemilih/downloadPemilih/<?php echo $page;?>" target="_blank"><i class="mdi-file-cloud-download"></i> Download</a>
               </div>
-            </div>
+
+              <div class="input-field col s12 m4">
+                  <a class="btn primary waves-effect waves-light right-align" href="<?php echo base_url();?>pemilih/tambah" ><i class="mdi-content-create"></i> Tambah</a>
+              </div>
+            </div>            
 
           </div>
         <!-- </div> -->
@@ -254,21 +256,21 @@
   setKelurahan();
   setTps();
 
-  $("#provinsi").change(function(event){
-    getKota(this.value);
-  });
+    $("#provinsi").change(function(event){
+      getKota(this.value);
+    });
 
-  $("#kotakabupaten").change(function(event){
-    getKecamatan(this.value);
-  });  
+    $("#kotakabupaten").change(function(event){
+      getKecamatan(this.value);
+    });  
 
-  $("#kecamatan").change(function(event){
-    getKelurahan(this.value);
-  });
+    $("#kecamatan").change(function(event){
+      getKelurahan(this.value);
+    });
 
-  $("#kelurahan").change(function(event) {
-    getTps(this.value);
-  })
+    $("#kelurahan").change(function(event) {
+      getTps(this.value);
+    })
 
   function setKota(){
     provinsi = $("#provinsi").val();

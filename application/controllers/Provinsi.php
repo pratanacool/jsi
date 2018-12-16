@@ -3,6 +3,11 @@
     function __construct(){
       parent ::__construct();
       $this->load->library('pagination');
+      $role = $this->session->userdata('role');
+
+      if($role != '1'){
+        redirect(base_url()."login");
+      }
     }
 
     public function index(){

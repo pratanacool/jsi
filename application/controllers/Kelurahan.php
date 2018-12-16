@@ -4,6 +4,11 @@
       parent ::__construct();
       $this->load->library('pagination');
       $this->load->model('M_Kelurahan', 'kelurahan', true);
+      $role = $this->session->userdata('role');
+
+      if($role != '1'){
+        redirect(base_url()."login");
+      }
     }
 
     public function index(){
