@@ -727,9 +727,9 @@
     {
       $listTPS = array();
       
-      for ($i = 1; $i <= 40; $i++) {
-        array_push($listTPS, $i);    
-      }
+      // for ($i = 1; $i <= 40; $i++) {
+      //   array_push($listTPS, $i);    
+      // }
 
       $this->load->model("M_Provinsi");
 
@@ -743,7 +743,7 @@
       $data['judul'] = "Tambah Pemilih";
       $data['breadcrumbs'] = "";
       $data['listProvinsi'] = $listProvinsi;
-      $data['listTPS'] = $listTPS;
+      // $data['listTPS'] = $listTPS;
 
       $this->render_page('pemilih/form', $data);
     }
@@ -758,7 +758,7 @@
       $kota = $this->input->post('kota');
       $kecamatan = $this->input->post('kecamatan');
       $kelurahan = $this->input->post('kelurahan');
-      $tps = $this->input->post('tps');
+      // $tps = $this->input->post('tps');
       
       $this->pemilih->nik = $nik;
       $this->pemilih->nama = $nama;
@@ -768,7 +768,7 @@
       $this->pemilih->kota = $kota;
       $this->pemilih->kecamatan = $kecamatan;
       $this->pemilih->kelurahan = $kelurahan;
-      $this->pemilih->tps = $tps;
+      // $this->pemilih->tps = $tps;
       
       $hasil = $this->pemilih->save();
 

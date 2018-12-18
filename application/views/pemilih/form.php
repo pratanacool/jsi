@@ -58,13 +58,6 @@
               <label for="icon_prefix">Kelurahan</label>
             </div>
 
-            <div class="input-field col s1">
-              <?php
-                echo form_dropdown('tps', $listTPS, '', 'id="tps"');
-              ?>
-              <label for="icon_prefix">TPS</label>
-            </div>
-            
             <div class="input-field col s2">
               <input placeholder="NIK" type="text" name="nik">
               <label for="NIK">NIK</label>
